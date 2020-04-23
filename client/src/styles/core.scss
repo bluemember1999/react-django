@@ -1,0 +1,16 @@
+html, body, #root, #root>div {
+  height: 100%;
+}
+
+.container {
+  position: relative;
+}
+
+.jumbotron {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  transform: translate(-50%, -50%);
+  border: 1px dashed deeppink;
+}

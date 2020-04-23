@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button } from 'reactstrap';
+import Routes from 'routes';
 
 const App = () => (
-  <Button />
+  <Routes />
 );
 
 export default App;
