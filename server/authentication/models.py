@@ -9,6 +9,7 @@ class User(AbstractUser):
         ('MANAGER', 'MANAGER'),
         ('ADMIN', 'ADMIN'),
     ]
+    username = models.CharField(_("User's username"), max_length=255, unique=True)
     email = models.EmailField(_("User's Email Address"), unique=True)
     first_name = models.CharField(_("User's First Name"), max_length=20, blank=True, null=True)
     last_name = models.CharField(_("User's Last Name"), max_length=20, blank=True, null=True)
