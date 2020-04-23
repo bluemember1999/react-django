@@ -8,7 +8,7 @@ import rootSaga from './middlewares';
 
 export const history = createBrowserHistory();
 
-const middleware = routerMiddleware(history)
+const middleware = routerMiddleware(history);
 const sagaMiddlware = createSagaMiddlware();
 const middlewares = [middleware, sagaMiddlware];
 
@@ -29,7 +29,5 @@ export const store = createStore(
   rootReducer,
   composeEnhancers(...enhancers)
 );
-
-export default store;
 
 sagaMiddlware.run(rootSaga);
