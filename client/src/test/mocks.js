@@ -1,5 +1,5 @@
-export const UserMock = () => ({
-  id: 1,
+export const UserMock = (id = 1) => ({
+  id,
   first_name: 'John',
   last_name: 'Doe',
   email: 'johndoe@gmail.com',

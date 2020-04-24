@@ -1,5 +1,6 @@
 import { handleActions, combineActions } from 'redux-actions';
 import { get } from 'lodash';
+import { wrap as imm } from 'object-path-immutable';
 import { getAuthData, } from 'utils/storage';
 import {
   LOGIN,
@@ -16,13 +17,28 @@ export const authReducer = handleActions({
   [combineActions(
     LOGIN.REQUEST,
     REGISTER.REQUEST,
-  )]: (state, { type }) => ({ ...state, error: null, status: type }),
+  )]: (state, { type }) => {
+    return imm(state)
+      .set('error', null)
+      .set('status', type)
+      .value();
+  },
   [combineActions(
     LOGIN.SUCCESS,
     REGISTER.SUCCESS,
-  )]: (state, { payload, type }) => ({ ...state, user: payload.user, status: type }),
+  )]: (state, { payload, type }) => {
+    return imm(state)
+      .set('user', payload.user)
+      .set('status', type)
+      .value();
+  },
   [combineActions(
     LOGIN.FAILURE,
     REGISTER.FAILURE,
-  )]: (state, { payload, type }) => ({ ...state, error: payload.message, status: type }),
+  )]: (state, { payload, type }) => {
+    return imm(state)
+      .set('error', payload.message)
+      .set('status', type)
+      .value();
+  },
 }, initialState);
