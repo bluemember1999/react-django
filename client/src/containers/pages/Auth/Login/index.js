@@ -30,9 +30,9 @@ class LoginPage extends Component {
     const failureLogIn = status === LOGIN.FAILURE;
 
     return (
-      <Container>
-        <Jumbotron>
-          <h3>
+      <Container className="d-flex justify-content-center align-items-center">
+        <Jumbotron className="jumbotron-login">
+          <h3 className="d-flex justify-content-center">
             <u>Login Form</u>
           </h3>
           <hr />
@@ -45,7 +45,7 @@ class LoginPage extends Component {
               />
             </CardBody>
           </Card>
-            </Jumbotron>
+        </Jumbotron>
       </Container>
     );
   }
@@ -56,8 +56,16 @@ LoginPage.propTypes = {
   history: PropTypes.object,
   status: PropTypes.string,
   error: PropTypes.string,
-  login: PropTypes.func,
-}
+  logIn: PropTypes.func,
+};
+
+LoginPage.defaultProps = {
+  loggedIn: false,
+  history: {},
+  status: '',
+  error: '',
+  logIn: null,
+};
 
 const selectors = createStructuredSelector({
   loggedIn: selectLoggedIn,

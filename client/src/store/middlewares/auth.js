@@ -9,7 +9,7 @@ import { setAuthData } from 'utils/storage';
 import { parseError } from 'utils/error-parser';
 import * as ACTIONS from 'store/actions/auth';
 
-export const doLogIn = function*({ payload }) {
+export function* doLogIn({ payload }) {
   try {
     const res = yield call(axios.post, `${API_BASE_URL}/auth/login/`, payload);
 
@@ -20,7 +20,7 @@ export const doLogIn = function*({ payload }) {
   }
 };
 
-export const doRegister = function*({ payload }) {
+export function* doRegister({ payload }) {
   try {
     const res = yield call(axios.post, `${API_BASE_URL}/auth/register/`, payload);
 
@@ -31,7 +31,7 @@ export const doRegister = function*({ payload }) {
   }
 };
 
-export const authSaga = function*() {
+export function* authSaga() {
   yield takeLatest(ACTIONS.logIn, doLogIn);
   yield takeLatest(ACTIONS.register, doRegister);
 };

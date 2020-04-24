@@ -61,7 +61,7 @@
       "last 1 safari version"
     ]
   },
-  "precommit": "NODE_ENV=production lint-staged",
+  "precommit": "NODE_ENV=development lint-staged",
   "lint-staged": {
     "*.{js, jsx}": [
       "pretty-quick --staged",

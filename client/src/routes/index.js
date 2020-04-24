@@ -9,7 +9,7 @@ import {
   RegisterPage,
 } from 'containers/pages';
 import ScrollToTop from 'components/ScrollToTop';
-import { userIsNotAuthenticated } from 'utils/auth.js';
+import { userIsNotAuthenticated } from 'utils/auth';
 
 const Routes = () => (
   <BrowserRouter>
