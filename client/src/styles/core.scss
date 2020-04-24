@@ -2,8 +2,13 @@ html, body, #root, #root>div {
   height: 100%;
 }
 
-.jumbotron-login {
-  width: 40%;
+.jumbotron-form {
   border: 1px dashed deeppink;
   padding: 2rem 2rem;
+  &__login {
+    width: 40%
+  }
+  &__register {
+    width: 60%;
+  }
 }

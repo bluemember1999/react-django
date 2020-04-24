@@ -7,9 +7,27 @@ import {
 import {
   LoginPage,
   RegisterPage,
+  Dashboard,
+  UserPage,
+  TimezonePage,
+  Page404,
 } from 'containers/pages';
 import ScrollToTop from 'components/ScrollToTop';
-import { userIsNotAuthenticated } from 'utils/auth';
+import {
+  userIsAuthenticated,
+  userIsNotAuthenticated,
+  userIsAdminOrManager,
+  userIsAdminOrUser,
+} from 'utils/auth';
+
+const AuthenticatedRoutes = () => (
+  <Switch>
+    <Route exact path="/" component={Dashboard} />
+    <Route exact path="/timezone" component={userIsAdminOrUser(TimezonePage)} />
+    <Route exact path="/user" component={userIsAdminOrManager(UserPage)} />
+    <Route component={Page404} />
+  </Switch>
+);
 
 const Routes = () => (
   <BrowserRouter>
@@ -17,6 +35,7 @@ const Routes = () => (
       <Switch>
         <Route exact path="/login" component={userIsNotAuthenticated(LoginPage)} />
         <Route exact path="/register" component={userIsNotAuthenticated(RegisterPage)} />
+        <Route exact path="/" component={userIsAuthenticated(AuthenticatedRoutes)} />
       </Switch>
     </ScrollToTop>
   </BrowserRouter>

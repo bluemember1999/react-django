@@ -16,11 +16,10 @@ import { selectLoggedIn, selectAuthStatus, selectAuthError } from 'store/selecto
 import { LoginForm } from 'components'; 
 import { withRouter } from 'react-router';
 
-class LoginPage extends Component {
-  handleLogin = (events, values) => {
+export class LoginPage extends Component {
+  handleLogin = (values) => {
     const { logIn } = this.props;
 
-    events.preventDefault();
     logIn(values);
   }
 
@@ -31,7 +30,7 @@ class LoginPage extends Component {
 
     return (
       <Container className="d-flex justify-content-center align-items-center">
-        <Jumbotron className="jumbotron-login">
+        <Jumbotron className="jumbotron-form__login">
           <h3 className="d-flex justify-content-center">
             <u>Login Form</u>
           </h3>
@@ -53,7 +52,6 @@ class LoginPage extends Component {
 
 LoginPage.propTypes = {
   loggedIn: PropTypes.bool,
-  history: PropTypes.object,
   status: PropTypes.string,
   error: PropTypes.string,
   logIn: PropTypes.func,
@@ -61,9 +59,8 @@ LoginPage.propTypes = {
 
 LoginPage.defaultProps = {
   loggedIn: false,
-  history: {},
-  status: '',
-  error: '',
+  status: 'INIT',
+  error: null,
   logIn: null,
 };
 
