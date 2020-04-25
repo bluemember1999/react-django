@@ -6,7 +6,7 @@ import  {
 } from 'redux-saga/effects';
 import { API_BASE_URL } from 'config/base';
 import { parseError } from 'utils/error-parser';
-import * as ACTIONS from 'store/actions/auth';
+import * as ACTIONS from 'store/actions/user';
 
 export function* doGetUsers({ payload }) {
   try {
@@ -21,7 +21,8 @@ export function* doGetUsers({ payload }) {
 
 export function* doCreateUser({ payload }) {
   try {
-    const res = yield(axios.post, `${API_BASE_URL}/api/user/`, payload);
+    console.log(payload);
+    const res = yield call(axios.post, `${API_BASE_URL}/api/user/`, payload);
 
     yield put(ACTIONS.createUserSuccess(res.data));
   } catch (error) {

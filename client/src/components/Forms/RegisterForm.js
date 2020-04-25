@@ -2,89 +2,96 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
+  Form,
+  Input,
   Button,
-  Col,
-  FormGroup,
   Row,
-} from 'reactstrap';
-import {
-  AvForm,
-  AvField,
-} from 'availity-reactstrap-validation';
+} from 'antd';
+import Validators from './Validators';
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 },
+  },
+};
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: { span: 24, offset: 0, },
+    sm: { span: 16, offset: 8, },
+  },
+};
 
 class RegisterForm extends React.Component {
-  handleSubmit = (event, values) => {
-    const { handleValidSubmit } = this.props;
+  handleSubmit = (values) => {
+    const { handleRegister } = this.props;
 
-    event.preventDefault();
-    handleValidSubmit(values);
+    handleRegister(values);
   }
-
+  
   render() {
     const { registering } = this.props;
 
     return (
-      <AvForm 
-        onValidSubmit={this.handleSubmit}
+      <Form
+        name="register-form"
+        className="register-form"
+        onFinish={this.handleSubmit}
+        scrollToFirstError
+        {...formItemLayout}
       >
-        <Row>
-          <Col>
-            <AvField
-              name="first_name"
-              label="First Name"
-              type="text"
-              validate={{
-                required: true,
-              }}
-            />
-          </Col>
-          <Col>
-            <AvField
-              name="last_name"
-              label="Last Name"
-              type="text"
-              validate={{
-                required: true,
-              }}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <AvField
-              name="username"
-              label="Username"
-              type="text"
-              validate={{
-                required: true,
-              }}
-            />
-          </Col>
-          <Col>
-            <AvField
-              name="email"
-              label="Email"
-              type="text"
-              validate={{
-                required: true,
-                email: true,
-              }}
-            />
-          </Col>
-        </Row>
-        <FormGroup>
-          <Row className="justify-content-center">
-            <Button id="submit" disabled={registering} color="success">
+        <Form.Item label="First Name" name="first_name" rules={Validators.first_name.rules}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="Last Name" name="last_name" rules={Validators.last_name.rules}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="Username" name="username" rules={Validators.username.rules}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="Email" name="email" rules={Validators.email.rules}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="Password" name="password" rules={Validators.password.rules}>
+          <Input.Password />
+        </Form.Item>
+        <Form.Item 
+          label="Confirm Password" 
+          name="confirm_password"
+          rules={
+            [
+              { reuiqred: true, message: 'Please confirm your password!' },
+              ({ getFieldValue }) => ({
+                validator(rule, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('The two passwords that you entered do not match!');
+                },
+              }),
+            ]
+          }
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item {...tailFormItemLayout}>
+          <Row type="flex" justify="space-around" align="middle">
+            <Button type="primary" htmlType="submit" loading={registering}>
               Register
             </Button>
             <Link to="/login">
-              <Button disabled={registering} color="link">
+              <Button loading={registering}>
                 Log In
               </Button>
             </Link>
           </Row>
-        </FormGroup>
-      </AvForm>
+        </Form.Item>
+      </Form>
     );
   }
 }

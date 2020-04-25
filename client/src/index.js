@@ -1,18 +1,34 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'antd/dist/antd.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import axios from 'axios';
 import { store } from 'store';
 import App from 'App';
 import 'styles/core.scss';
 import * as serviceWorker from './serviceWorker';
+import { getAuthData } from 'utils/storage';
+
+axios.interceptors.request.use((config) => {
+  const authData = getAuthData();
+
+  if (!config) {
+    config = {};
+  }
+
+  if (authData) {
+    config.headers['Authorization'] = `jwt ${authData.token}`;
+  }
+
+  return config;
+});
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <App />
-    </Provider>
-  </React.StrictMode>,
+    </Provider>,
+  // </React.StrictMode>,
   document.getElementById('root')
 );
 

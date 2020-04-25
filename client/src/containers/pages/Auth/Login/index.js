@@ -2,19 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { createStructuredSelector } from 'reselect';
-import {
-  Alert,
-  Card,
-  CardBody,
-  Container,
-  Jumbotron,
-} from 'reactstrap';
+import { Alert } from 'antd';
 import { LOGIN } from 'store/constants/auth';
 import { logIn } from 'store/actions/auth';
 import { selectLoggedIn, selectAuthStatus, selectAuthError } from 'store/selectors/auth';
 import { LoginForm } from 'components'; 
-import { withRouter } from 'react-router';
 
 export class LoginPage extends Component {
   handleLogin = (values) => {
@@ -29,23 +23,14 @@ export class LoginPage extends Component {
     const failureLogIn = status === LOGIN.FAILURE;
 
     return (
-      <Container className="d-flex justify-content-center align-items-center">
-        <Jumbotron className="jumbotron-form__login">
-          <h3 className="d-flex justify-content-center">
-            <u>Login Form</u>
-          </h3>
-          <hr />
-          { failureLogIn && <Alert>{ error }</Alert> }
-          <Card>
-            <CardBody>
-              <LoginForm 
-                handleValidSubmit={this.handleLogin}
-                loggingIn={loggingIn}
-              />
-            </CardBody>
-          </Card>
-        </Jumbotron>
-      </Container>
+      <div className="auth-page login-page">
+        <h2 className="auth-page__heading">LOG IN</h2>
+        { failureLogIn && <Alert message={error} type="error" showIcon style={{ marginBottom: 20 }} banner /> }
+        <LoginForm 
+          handleLogin={this.handleLogin}
+          loggingIn={loggingIn}
+        />
+      </div>
     );
   }
 }

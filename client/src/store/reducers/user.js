@@ -32,15 +32,18 @@ export const userReducer = handleActions({
       .value();
   },
   [GET_USERS.SUCCESS]: (state, { payload, type }) => {
+    const users = payload.data.results;
+    const updated = users.map((user) => ({ ...user, key: user.email }));
+
     return imm(state)
-      .set('users.data', payload.data)
+      .set('users.data', updated)
       .set('users.pageNo', payload.pageNo)
       .set('status', type)
       .value();
   },
   [CREATE_USER.SUCCESS]: (state, { payload, type }) => {
     const users = get(state,  'users.data');
-    const updated = [payload, ...users];
+    const updated = [{...payload, key: payload.email}, ...users];
 
     return imm(state)
       .set('users.data', updated)

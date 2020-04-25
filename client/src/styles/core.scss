@@ -1,14 +1,6 @@
-html, body, #root, #root>div {
-  height: 100%;
-}
+@import 'pages/_auth.scss';
+@import 'pages/_layout.scss';
 
-.jumbotron-form {
-  border: 1px dashed deeppink;
-  padding: 2rem 2rem;
-  &__login {
-    width: 40%
-  }
-  &__register {
-    width: 60%;
-  }
+html, body, #root, #root {
+  height: 100%;
 }

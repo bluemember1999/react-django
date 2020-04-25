@@ -9,3 +9,5 @@ export const register = createAction(CONSTANTS.REGISTER.REQUEST);
 export const registerSuccess = createAction(CONSTANTS.REGISTER.SUCCESS);
 export const registerFailure = createAction(CONSTANTS.LOGIN.FAILURE);
 
+export const logout = createAction(CONSTANTS.LOGOUT);
+
