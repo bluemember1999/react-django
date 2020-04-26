@@ -14,7 +14,10 @@ import {
 import { SubmitButton } from 'components';
 import Validators from './Validators';
 
-const LoginForm = ({ loggingIn, handleLogin }) => (
+const LoginForm = ({
+  loggingIn,
+  handleLogin,
+}) => (
   <Form
     name="login-form"
     className="login-form"
@@ -58,7 +61,7 @@ const LoginForm = ({ loggingIn, handleLogin }) => (
       </Row>
     </Form.Item>
   </Form>
-)
+);
 
 LoginForm.propTypes = {
   loggingIn: PropTypes.bool,

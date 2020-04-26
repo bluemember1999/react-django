@@ -13,6 +13,7 @@ const mockState = {
       data: [UserMock(1), UserMock(2)],
       pageNo: 1,
       pageSize: 10,
+      total: 0,
     },
     currentUser: UserMock(1),
     status: 'INIT',
@@ -25,6 +26,7 @@ describe('UserSelector', () => {
     const { user } = mockState;
 
     expect(selectUsers(mockState)).toEqual(get(user, 'users.data'));
+    expect(selectUserTotal(mockState)).toEqual(get(user, 'users.total'));
     expect(selectCurrentUser(mockState)).toEqual(user.currentUser);
     expect(selectUserStatus(mockState)).toEqual(user.status);
     expect(selectUserError(mockState)).toEqual(user.error);

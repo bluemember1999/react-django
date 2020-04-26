@@ -3,19 +3,25 @@ import  {
   call,
   put,
   takeLatest,
+  select,
 } from 'redux-saga/effects';
+import * as ACTIONS from 'store/actions/timezone';
 import { API_BASE_URL } from 'config/base';
 import { parseError } from 'utils/error-parser';
-import * as ACTIONS from 'store/actions/timezone';
+import _ from 'lodash';
 
 export function* doGetTimezones({ payload }) {
   try {
-    const { pageNo } = payload;
-    const res = yield call(axios.get, `${API_BASE_URL}/api/timezone/?page=${pageNo}`);
+    const state = yield select();
+    const { pageNo, search } = payload;
+    const updatedPageNo = pageNo === undefined ? _.get(state, 'timezone.timezones.pageNo') : pageNo;
+    const updatedSearch = search === undefined ? _.get(state, 'timezone.search') : search;
+    const res = yield call(axios.get, `${API_BASE_URL}/api/timezone/?page=${updatedPageNo}&search=${updatedSearch}`);
 
     yield put(ACTIONS.getTimezonesSuccess({
       data: res.data, 
-      pageNo,
+      pageNo: updatedPageNo,
+      search: updatedSearch,
     }));
   } catch (error) {
     yield put(ACTIONS.getTimezonesFailure(parseError(error)));

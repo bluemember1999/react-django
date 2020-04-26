@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import {
@@ -31,6 +32,7 @@ import { selectIsAdmin } from 'store/selectors/auth';
 import {
   selectUsers,
   selectUserTotal,
+  selectUserPageNo,
   selectUserStatus,
   selectUserError,
 } from 'store/selectors/user';
@@ -211,6 +213,7 @@ class UserPage extends Component {
       isAdmin,
       users,
       userTotal,
+      userPageNo,
       error,
     } = this.props;
     const {
@@ -236,6 +239,7 @@ class UserPage extends Component {
             columns={columns}
             dataSource={users}
             total={userTotal}
+            pageNo={userPageNo}
             loading={loading}
             handlePaginate={this.handlePaginate}
             renderHeader={this.renderHeader}
@@ -259,6 +263,7 @@ const selectors = createStructuredSelector({
   isAdmin: selectIsAdmin,
   users: selectUsers,
   userTotal: selectUserTotal,
+  userPageNo: selectUserPageNo,
   status: selectUserStatus,
   error: selectUserError,
 });
@@ -268,5 +273,32 @@ const actions = {
   updateUser,
   deleteUser,
 };
+
+UserPage.propTypes = {
+  isAdmin: PropTypes.bool,
+  users: PropTypes.array,
+  userTotal: PropTypes.number,
+  userPageNo: PropTypes.number,
+  status: PropTypes.string,
+  error: PropTypes.string,
+  getUsers: PropTypes.func,
+  createUser: PropTypes.func,
+  updateUser: PropTypes.func,
+  deleteUser: PropTypes.func,
+};
+
+UserPage.defaultProps = {
+  isAdmin: false,
+  users: [],
+  userTotal: 0,
+  userPageNo: 1,
+  status: '',
+  error: '',
+  getUsers: null,
+  createUser: null,
+  updateUser: null,
+  deleteUser: null,
+};
+
 
 export default connect(selectors, actions)(UserPage);

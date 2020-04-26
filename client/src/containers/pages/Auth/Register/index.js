@@ -39,7 +39,7 @@ const RegisterPage = ({
       />
     </div>
   );
-}
+};
 
 RegisterPage.propTypes = {
   status: PropTypes.string,

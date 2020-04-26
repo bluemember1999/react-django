@@ -34,7 +34,10 @@ const tailFormItemLayout = {
   },
 };
 
-const RegisterForm = ({ registering, handleRegister }) => (
+const RegisterForm = ({
+  registering,
+  handleRegister,
+}) => (
   <Form
     name="register-form"
     className="register-form"
@@ -88,7 +91,7 @@ const RegisterForm = ({ registering, handleRegister }) => (
               if (!value || getFieldValue('password') === value) {
                 return Promise.resolve();
               }
-              return Promise.reject('The two passwords that you entered do not match!');
+              return Promise.reject(new Error('The two passwords that you entered do not match!'));
             },
           }),
         ]

@@ -9,4 +9,4 @@ describe('Page404', () => {
 
     expect(wrapper.find(Link).length).toBe(1);
   });
-})
+});

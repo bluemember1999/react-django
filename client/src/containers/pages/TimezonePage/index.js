@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import {
@@ -31,6 +32,7 @@ import { selectLoggedInUserId } from 'store/selectors/auth';
 import {
   selectTimezones,
   selectTimezoneTotal,
+  selectTimezonePageNo,
   selectTimezoneStatus,
   selectTimezoneError,
 } from 'store/selectors/timezone';
@@ -75,8 +77,8 @@ class TimezonePage extends Component {
           render: (text) => (
             <span>
               { `UTC${text >= 0 ?
-                  '+' + String(text).padStart(2, '0') : 
-                  '-' + String(Math.abs(text)).padStart(2, '0')}:00`
+                  `+${String(text).padStart(2, '0')}` : 
+                  `-${String(Math.abs(text)).padStart(2, '0')}`}:00`
               }
             </span>
           )
@@ -233,6 +235,7 @@ class TimezonePage extends Component {
     const {
       timezones,
       timezoneTotal,
+      timezonePageNo,
       error,
     } = this.props;
     const {
@@ -258,6 +261,7 @@ class TimezonePage extends Component {
             columns={columns}
             dataSource={timezones}
             total={timezoneTotal}
+            pageNo={timezonePageNo}
             loading={loading}
             handlePaginate={this.handlePaginate}
             renderHeader={this.renderHeader}
@@ -279,6 +283,7 @@ class TimezonePage extends Component {
 const selectors = createStructuredSelector({
   timezones: selectTimezones,
   timezoneTotal: selectTimezoneTotal,
+  timezonePageNo: selectTimezonePageNo,
   status: selectTimezoneStatus,
   error: selectTimezoneError,
   loggedInUserId: selectLoggedInUserId,
@@ -288,6 +293,32 @@ const actions = {
   createTimezone,
   updateTimezone,
   deleteTimezone,
+};
+
+TimezonePage.propTypes = {
+  timezones: PropTypes.array,
+  timezoneTotal: PropTypes.number,
+  timezonePageNo: PropTypes.number,
+  status: PropTypes.string,
+  error: PropTypes.string,
+  loggedInUserId: PropTypes.string,
+  getTimezones: PropTypes.func,
+  createTimezone: PropTypes.func,
+  updateTimezone: PropTypes.func,
+  deleteTimezone: PropTypes.func,
+};
+
+TimezonePage.defaultProps = {
+  timezones: [],
+  timezoneTotal: 0,
+  timezonePageNo: 1,
+  status: '',
+  error: '',
+  loggedInUserId: '1',
+  getTimezones: null,
+  createTimezone: null,
+  updateTimezone: null,
+  deleteTimezone: null,
 };
 
 export default connect(selectors, actions)(TimezonePage);

@@ -6,7 +6,7 @@ import axios from 'axios';
 import { store } from 'store';
 import App from 'App';
 import 'styles/core.scss';
-import * as serviceWorker from './serviceWorker';
+import * as serviceWorker from 'serviceWorker';
 import { getAuthData } from 'utils/storage';
 
 axios.interceptors.request.use((config) => {
@@ -16,7 +16,7 @@ axios.interceptors.request.use((config) => {
     config = {};
   }
   if (authData) {
-    config.headers['Authorization'] = `jwt ${authData.token}`;
+    config.headers.Authorization = `jwt ${authData.token}`;
   }
   return config;
 });

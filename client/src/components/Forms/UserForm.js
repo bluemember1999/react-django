@@ -18,7 +18,11 @@ const formItemLayout = {
   },
 };
 
-const UserForm = ({ isAdmin, currentUser, handleSave }) => (
+const UserForm = ({
+  isAdmin,
+  currentUser,
+  handleSave,
+}) => (
   <Form
     id="user-form"
     name="user-form"

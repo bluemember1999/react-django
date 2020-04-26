@@ -18,6 +18,7 @@ const initialState = {
     pageSize: 10,
     total: 0,
   },
+  search: '',
   status: 'INIT',
   error: null,
 };
@@ -41,6 +42,7 @@ export const userReducer = handleActions({
     return imm(state)
       .set('users.data', updated)
       .set('users.pageNo', payload.pageNo)
+      .set('users.search', payload.search)
       .set('users.total', payload.data.count)
       .set('status', type)
       .value();
@@ -76,11 +78,8 @@ export const userReducer = handleActions({
   [DELETE_USER.SUCCESS]: (state,  { payload, type }) => {
     const users = get(state, 'users.data');
     const total = get(state, 'users.total');
-    let updated = [...users];
-    let updatedTotal;
-    
-    updated = updated.filter((item) => item.id !== payload);
-    updatedTotal = total - (users.length - updated.length);
+    const updated = [...users].filter((item) => item.id !== payload);
+    const updatedTotal = total - (users.length - updated.length);
 
     return imm(state)
       .set('users.data', updated)

@@ -13,10 +13,10 @@ const UserModal = ({
   <Modal
     title="User Modal"
     visible={isVisible}
-    okButtonProps={{ 
+    okButtonProps={{
       form: 'user-form', 
       key: 'submit', 
-      htmlType: 'submit' 
+      htmlType: 'submit',
     }}
     onCancel={handleClose}
   >

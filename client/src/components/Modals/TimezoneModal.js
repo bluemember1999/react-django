@@ -13,7 +13,6 @@ const TimezoneModal = ({
     title="Timezone Modal"
     visible={isVisible}
     okButtonProps={{ 
-      title: 'Save',
       form: 'timezone-form', 
       key: 'submit', 
       htmlType: 'submit',

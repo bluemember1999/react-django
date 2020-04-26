@@ -18,6 +18,7 @@ const initialState = {
     pageSize: 10,
     total: 0,
   },
+  search: '',
   status: 'INIT',
   error: null,
 };
@@ -41,7 +42,9 @@ export const timezoneReducer = handleActions({
     return imm(state)
       .set('timezones.data', updated)
       .set('timezones.pageNo', payload.pageNo)
+      .set('timezones.search', payload.search)
       .set('timezones.total', payload.data.count)
+      .set('search', payload.search)
       .set('status', type)
       .value();
   },
@@ -76,11 +79,8 @@ export const timezoneReducer = handleActions({
   [DELETE_TIMEZONE.SUCCESS]: (state,  { payload, type }) => {
     const timezones = get(state, 'timezones.data');
     const total = get(state, 'timezones.total');
-    let updated = [...timezones];
-    let updatedTotal;
-    
-    updated = updated.filter((item) => item.id !== payload);
-    updatedTotal = total - (timezones.length - updated.length);
+    const updated = [...timezones].filter((item) => item.id !== payload);
+    const updatedTotal = total - (timezones.length - updated.length);
 
     return imm(state)
       .set('timezones.data', updated)
