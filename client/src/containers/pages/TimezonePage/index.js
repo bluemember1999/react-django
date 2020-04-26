@@ -27,6 +27,7 @@ import {
   updateTimezone,
   deleteTimezone,
 } from 'store/actions/timezone';
+import { selectLoggedInUserId } from 'store/selectors/auth';
 import {
   selectTimezones,
   selectTimezoneTotal,
@@ -71,6 +72,28 @@ class TimezonePage extends Component {
           title: 'Difference To GMT',
           dataIndex: 'difference_to_GMT',
           key: 'difference_to_GMT',
+          render: (text) => (
+            <span>
+              { `UTC${text >= 0 ?
+                  '+' + String(text).padStart(2, '0') : 
+                  '-' + String(Math.abs(text)).padStart(2, '0')}:00`
+              }
+            </span>
+          )
+        },
+        {
+          title: 'Current Time in timezone',
+          key: 'current_time',
+          render: (text, record) => (
+            <span>{ this.getTimeByTimezone(record.difference_to_GMT) }</span>
+          )
+        },
+        {
+          title: 'Difference to Browser Time',
+          key: 'difference_to_browser_time',
+          render: (text, record) => (
+            <span>{ `${-new Date().getTimezoneOffset() / 60 - record.difference_to_GMT}hrs` }</span>
+          )
         },
         {
           title: 'Actions',
@@ -104,6 +127,12 @@ class TimezonePage extends Component {
     const { getTimezones } = this.props;
 
     getTimezones({ pageNo: 1 });
+  }
+
+  getTimeByTimezone = (offset) => {
+    return new Date(
+      new Date().getTime() + offset * 3600 * 1000
+    ).toUTCString().replace( / GMT$/, "" );
   }
 
   getRequestStatus = () => {
@@ -155,11 +184,12 @@ class TimezonePage extends Component {
     const {
       createTimezone,
       updateTimezone,
+      loggedInUserId,
     } = this.props;
     const { currentTimezone } = this.state;
 
     if (Object.keys(currentTimezone).length === 0) {
-      createTimezone(values);
+      createTimezone({ ...values, user: loggedInUserId});
     } else {
       updateTimezone({
         timezoneId: currentTimezone.id,
@@ -251,6 +281,7 @@ const selectors = createStructuredSelector({
   timezoneTotal: selectTimezoneTotal,
   status: selectTimezoneStatus,
   error: selectTimezoneError,
+  loggedInUserId: selectLoggedInUserId,
 });
 const actions = {
   getTimezones,

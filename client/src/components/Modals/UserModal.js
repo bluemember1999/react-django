@@ -5,11 +5,12 @@ import { UserForm } from 'components';
 
 const UserModal = ({
   isVisible,
+  isAdmin,
   currentUser,
   handleClose,
   handleSave,
 }) => (
-  <Modal 
+  <Modal
     title="User Modal"
     visible={isVisible}
     okButtonProps={{ 
@@ -20,6 +21,7 @@ const UserModal = ({
     onCancel={handleClose}
   >
     <UserForm
+      isAdmin={isAdmin}
       currentUser={currentUser}
       handleSave={handleSave}
     />
@@ -28,6 +30,7 @@ const UserModal = ({
 
 UserModal.propTypes = {
   isVisible: PropTypes.bool,
+  isAdmin: PropTypes.bool,
   currentUser: PropTypes.object,
   handleClose: PropTypes.func,
   handleSave: PropTypes.func,
@@ -35,6 +38,7 @@ UserModal.propTypes = {
 
 UserModal.defaultProps = {
   isVisible: false,
+  isAdmin: false,
   currentUser: {},
   handleClose: null,
   handleSave: null,

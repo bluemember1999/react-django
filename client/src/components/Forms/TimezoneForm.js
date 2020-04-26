@@ -55,12 +55,6 @@ const TimezoneForm = ({
         max={14}
       />
     </Form.Item>
-    <Form.Item
-      label="User"
-      name="user"
-    >
-      <Input />
-    </Form.Item>
   </Form>
 );
 

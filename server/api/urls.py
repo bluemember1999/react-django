@@ -7,7 +7,7 @@ from .views import (
 )
 
 urlpatterns = [
-    url(r'^timezone/$', TimezoneListView.as_view()),
+    url(r'^timezone/', TimezoneListView.as_view()),
     url(r'^timezone/(?P<pk>(\w+))/$', TimezoneDetailView.as_view()),
     url(r'^user/$', UserListView.as_view()),
     url(r'^user/(?P<pk>(\w+))/$', UserDetailView.as_view()),

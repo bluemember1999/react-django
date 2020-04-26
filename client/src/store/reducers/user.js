@@ -65,7 +65,7 @@ export const userReducer = handleActions({
     const index = updated.findIndex((item) => item.id === payload.id);
 
     if (index >= 0) {
-      updated[index] = payload;
+      updated[index] = { ...payload, key: payload.id };
     }
 
     return imm(state)

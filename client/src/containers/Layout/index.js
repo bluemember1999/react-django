@@ -17,6 +17,11 @@ import {
   LogoutOutlined
 } from '@ant-design/icons';
 import { logout } from 'store/actions/auth';
+import {
+  selectIsAdmin,
+  selectIsManager,
+  selectIsUser,
+} from 'store/selectors/auth';
 import _ from 'lodash';
 
 const {
@@ -24,7 +29,14 @@ const {
   Content,
 } = Layout;
 
-const CustomLayout = ({ children, location, logout }) => {
+const CustomLayout = ({
+  isAdmin,
+  isManager,
+  isUser,
+  children,
+  location,
+  logout,
+}) => {
   const { pathname } = location;
   const selectedKey = 
     _.includes(['/timezone', '/user'], pathname) ? pathname : '/timezone';
@@ -34,19 +46,24 @@ const CustomLayout = ({ children, location, logout }) => {
       <Header>
         <Row type="flex" justify="space-between" align="middle">
           <Menu theme="dark" mode="horizontal" selectedKeys={[selectedKey]}>
-            <Menu.Item key="/timezone">
-              <Link to="/timezone">
-                <FieldTimeOutlined />
-                Timezone
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="/user">
-              <Link to="/user">
-                <UserOutlined />
-                User
-              </Link>
-            </Menu.Item>
-          </Menu>
+            { (isAdmin || isUser) &&
+              <Menu.Item key="/timezone">
+                <Link to="/timezone">
+                  <FieldTimeOutlined />
+                  Timezone
+                </Link>
+              </Menu.Item>
+            }
+            {
+              (isAdmin || isManager) &&
+              <Menu.Item key="/user">
+                <Link to="/user">
+                  <UserOutlined />
+                  User
+                </Link>
+              </Menu.Item>
+            }
+          </Menu >
           <Button 
             type="link" 
             icon={<LogoutOutlined />} 
@@ -70,7 +87,11 @@ const CustomLayout = ({ children, location, logout }) => {
   );
 };
 
-const selectors = createStructuredSelector({});
+const selectors = createStructuredSelector({
+  isAdmin: selectIsAdmin,
+  isManager: selectIsManager,
+  isUser: selectIsUser,
+});
 const actions = { logout };
 
 export default compose(

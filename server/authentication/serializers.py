@@ -31,7 +31,19 @@ class CustomJSONWebTokenSerializer(JSONWebTokenSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password', 'role')
+        fields = ('id', 'username', 'first_name', 'last_name', 'password', 'email', 'role')
+        extra_kwargs = {
+            'password': { 'write_only': True },
+        }
+    
+    def update(self, instance, validated_data):
+        for field in validated_data:
+            if field == 'password':
+                instance.set_password(validated_data.get('password'))
+            else:
+                instance.__setattr__(field, validated_data.get(field))
+        instance.save()
+        return instance
 
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,30 +53,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': { 'write_only': True },
         }
-    
+
     def create(self, validated_data):
         user = super(UserCreateSerializer, self).create(validated_data)
         password = validated_data.get('password')
         user.set_password(password)
-        user.save()
-
-        return user
-
-class UserUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password', 'role')
-        read_only_fields = ('id',)
-        extra_kwargs = {
-            'password': { 'write_only': True, 'required': False },
-        }
-    
-    def update(self, validated_data):
-        user = super(UserUpdateSerializer, self).update(validated_data)
-
-        if 'password' in validated_data:
-            user.set_password(validated_data['password'])
-        
         user.save()
 
         return user

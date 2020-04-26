@@ -27,6 +27,7 @@ import {
   updateUser,
   deleteUser,
 } from 'store/actions/user';
+import { selectIsAdmin } from 'store/selectors/auth';
 import {
   selectUsers,
   selectUserTotal,
@@ -207,6 +208,7 @@ class UserPage extends Component {
 
   render() {
     const { 
+      isAdmin,
       users,
       userTotal,
       error,
@@ -242,6 +244,7 @@ class UserPage extends Component {
         { isVisible &&
           <UserModal
             isVisible={isVisible}
+            isAdmin={isAdmin}
             currentUser={currentUser}
             handleClose={() => this.setVisible()}
             handleSave={this.handleCreateOrUpdate}
@@ -253,6 +256,7 @@ class UserPage extends Component {
 }
 
 const selectors = createStructuredSelector({
+  isAdmin: selectIsAdmin,
   users: selectUsers,
   userTotal: selectUserTotal,
   status: selectUserStatus,

@@ -7,7 +7,6 @@ import {
 } from 'antd';
 import Validators from './Validators';
 
-const { Option } = Select;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -19,7 +18,7 @@ const formItemLayout = {
   },
 };
 
-const UserForm = ({ currentUser, handleSave }) => (
+const UserForm = ({ isAdmin, currentUser, handleSave }) => (
   <Form
     id="user-form"
     name="user-form"
@@ -67,23 +66,25 @@ const UserForm = ({ currentUser, handleSave }) => (
       label="Role" 
       name="role"
     >
-      <Input.Group compact>
-        <Select>
-          <Option value="USER">USER</Option>
-          <Option value="MANAGER">MANAGER</Option>
-          <Option value="ADMIN">ADMIN</Option>
-        </Select>
-      </Input.Group>
+      <Select>
+        <Select.Option value="USER">USER</Select.Option>
+        <Select.Option value="MANAGER">MANAGER</Select.Option>
+        { isAdmin &&
+          <Select.Option value="ADMIN">ADMIN</Select.Option> 
+        }
+      </Select>
     </Form.Item>
   </Form>
 );
 
 UserForm.propTypes = {
+  isAdmin: PropTypes.bool,
   currentUser: PropTypes.object,
   handleSave: PropTypes.func,
 };
 
 UserForm.defaultProps = {
+  isAdmin: false,
   currentUser: {},
   handleSave: null,
 };
