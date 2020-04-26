@@ -13,7 +13,10 @@ export function* doGetTimezones({ payload }) {
     const { pageNo } = payload;
     const res = yield call(axios.get, `${API_BASE_URL}/api/timezone/?page=${pageNo}`);
 
-    yield put(ACTIONS.getTimezonesSuccess({ data: res.data, pageNo }));
+    yield put(ACTIONS.getTimezonesSuccess({
+      data: res.data, 
+      pageNo,
+    }));
   } catch (error) {
     yield put(ACTIONS.getTimezonesFailure(parseError(error)));
   }

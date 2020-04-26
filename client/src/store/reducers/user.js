@@ -1,4 +1,7 @@
-import { handleActions, combineActions } from 'redux-actions';
+import {
+  handleActions,
+  combineActions,
+} from 'redux-actions';
 import { get } from 'lodash';
 import { wrap as imm } from 'object-path-immutable';
 import {
@@ -13,6 +16,7 @@ const initialState = {
     data: [],
     pageNo: 1,
     pageSize: 10,
+    total: 0,
   },
   status: 'INIT',
   error: null,
@@ -32,20 +36,26 @@ export const userReducer = handleActions({
   },
   [GET_USERS.SUCCESS]: (state, { payload, type }) => {
     const users = payload.data.results;
-    const updated = users.map((user) => ({ ...user, key: user.email }));
+    const updated = users.map((user) => ({ ...user, key: user.id }));
 
     return imm(state)
       .set('users.data', updated)
       .set('users.pageNo', payload.pageNo)
+      .set('users.total', payload.data.count)
       .set('status', type)
       .value();
   },
   [CREATE_USER.SUCCESS]: (state, { payload, type }) => {
     const users = get(state,  'users.data');
-    const updated = [{...payload, key: payload.email}, ...users];
+    const total = get(state, 'users.total');
+    const isExisted = users.findIndex((user) => user.id === payload.id) >= 0;
+    const updated = isExisted === false ? 
+      [{ ...payload, key: payload.id }, ...users] : [...users];
+    const updatedTotal = isExisted === false ? total + 1 : total;
 
     return imm(state)
       .set('users.data', updated)
+      .set('users.total', updatedTotal)
       .set('status', type)
       .value();
   },
@@ -65,12 +75,16 @@ export const userReducer = handleActions({
   },
   [DELETE_USER.SUCCESS]: (state,  { payload, type }) => {
     const users = get(state, 'users.data');
+    const total = get(state, 'users.total');
     let updated = [...users];
+    let updatedTotal;
     
     updated = updated.filter((item) => item.id !== payload);
+    updatedTotal = total - (users.length - updated.length);
 
     return imm(state)
       .set('users.data', updated)
+      .set('users.total', updatedTotal)
       .set('status', type)
       .value();
   },

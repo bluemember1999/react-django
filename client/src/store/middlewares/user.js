@@ -13,7 +13,10 @@ export function* doGetUsers({ payload }) {
     const { pageNo } = payload;
     const res = yield call(axios.get, `${API_BASE_URL}/api/user/?page=${pageNo}`);
 
-    yield put(ACTIONS.getUsersSuccess({ data: res.data, pageNo }));
+    yield put(ACTIONS.getUsersSuccess({ 
+      data: res.data, 
+      pageNo,
+    }));
   } catch (error) {
     yield put(ACTIONS.getUsersFailure(parseError(error)));
   }
@@ -32,7 +35,7 @@ export function* doCreateUser({ payload }) {
 export function* doUpdateUser({ payload }) {
   try {
     const { userId, updatedUser } = payload;
-    const res = yield call(axios.put, `${API_BASE_URL}/api/user/${userId}/`, updatedUser);
+    const res = yield call(axios.patch, `${API_BASE_URL}/api/user/${userId}/`, updatedUser);
 
     yield put(ACTIONS.updateUserSuccess(res.data));
   } catch (error) {

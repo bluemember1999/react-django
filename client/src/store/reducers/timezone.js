@@ -1,4 +1,7 @@
-import { handleActions, combineActions } from 'redux-actions';
+import { 
+  handleActions, 
+  combineActions,
+} from 'redux-actions';
 import { get } from 'lodash';
 import { wrap as imm } from 'object-path-immutable';
 import {
@@ -45,11 +48,14 @@ export const timezoneReducer = handleActions({
   [CREATE_TIMEZONE.SUCCESS]: (state, { payload, type }) => {
     const timezones = get(state,  'timezones.data');
     const total = get(state, 'timezones.total');
-    const updated = [{...payload, key: payload.id}, ...timezones];
+    const isExisted = timezones.findIndex((timezone) => timezone.id === payload.id) >= 0;
+    const updated = isExisted === false ? 
+      [{ ...payload, key: payload.id }, ...timezones] : [...timezones];
+    const updatedTotal = isExisted === false ? total + 1 : total;
 
     return imm(state)
       .set('timezones.data', updated)
-      .set('timezones.total', total + 1)
+      .set('timezones.total', updatedTotal)
       .set('status', type)
       .value();
   },
@@ -71,12 +77,14 @@ export const timezoneReducer = handleActions({
     const timezones = get(state, 'timezones.data');
     const total = get(state, 'timezones.total');
     let updated = [...timezones];
+    let updatedTotal;
     
     updated = updated.filter((item) => item.id !== payload);
+    updatedTotal = total - (timezones.length - updated.length);
 
     return imm(state)
       .set('timezones.data', updated)
-      .set('timezones.total', total - 1)
+      .set('timezones.total', updatedTotal)
       .set('status', type)
       .value();
   },

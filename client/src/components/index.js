@@ -6,5 +6,6 @@ export {
   ScrollToTop,
 };
 
+export * from './Buttons';
 export * from './Forms';
 export * from './Modals';

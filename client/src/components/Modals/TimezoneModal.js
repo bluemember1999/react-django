@@ -1,32 +1,44 @@
-import React, { Component } from 'react';
-import {
-  Modal,
-} from 'antd';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Modal } from 'antd';
 import { TimezoneForm } from 'components';
 
-class TimezoneModal extends Component {
-  render() {
-    const {
-      isVisible,
-      currentTimezone,
-      handleToggle,
-      handleSubmit,
-    } = this.props;
+const TimezoneModal = ({
+  isVisible,
+  currentTimezone,
+  handleClose,
+  handleSave,
+}) => (
+  <Modal 
+    title="Timezone Modal"
+    visible={isVisible}
+    okButtonProps={{ 
+      title: 'Save',
+      form: 'timezone-form', 
+      key: 'submit', 
+      htmlType: 'submit',
+    }}
+    onCancel={handleClose}
+  >
+    <TimezoneForm
+      currentTimezone={currentTimezone}
+      handleSave={handleSave}
+    />
+  </Modal>
+);
 
-    return (
-      <Modal 
-        title="Timezone Modal"
-        visible={isVisible}
-        okButtonProps={{ form: 'timezone-form', key: 'submit', htmlType: 'submit' }}
-        onCancel={handleToggle}
-      >
-        <TimezoneForm
-          currentTimezone={currentTimezone}
-          handleSubmit={handleSubmit}
-        />
-      </Modal>
-    );
-  }
-}
+TimezoneModal.propTypes = {
+  isVisible: PropTypes.bool,
+  currentTimezone: PropTypes.object,
+  handleClose: PropTypes.func,
+  handleSave: PropTypes.func,
+};
+
+TimezoneModal.defaultProps = {
+  isVisible: false,
+  currentTimezone: {},
+  handleClose: null,
+  handleSave: null,
+};
 
 export default TimezoneModal;

@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectUsers } from 'store/selectors/user';
 import {
-  getUsers,
-  createUser,
-  updateUser,
-  deleteUser,
-} from 'store/actions/user';
-import {
+  Alert,
   Layout,
   Popconfirm,
   Button,
@@ -22,9 +16,28 @@ import {
   UserAddOutlined,
 } from '@ant-design/icons';
 import {
+  GET_USERS,
+  CREATE_USER,
+  UPDATE_USER,
+  DELETE_USER,
+} from 'store/constants/user';
+import {
+  getUsers,
+  createUser,
+  updateUser,
+  deleteUser,
+} from 'store/actions/user';
+import {
+  selectUsers,
+  selectUserTotal,
+  selectUserStatus,
+  selectUserError,
+} from 'store/selectors/user';
+import {
   CustomTable,
   UserModal,
 } from 'components';
+import _ from 'lodash';
 
 const { Content } = Layout;
 
@@ -34,6 +47,11 @@ class UserPage extends Component {
     
     this.state = {
       columns: [
+        {
+          title: 'No',
+          key: 'index',
+          render: (text, record, index) => index + 1,
+        },
         {
           title: 'First Name',
           dataIndex: 'first_name',
@@ -65,9 +83,19 @@ class UserPage extends Component {
           key: 'actions',
           render: (text, record) => (
             <Space>
-              <Button color="primary" icon={<EditOutlined />} onClick={() => this.handleEdit(record.key)} />
-              <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                <Button color="primary" icon={<DeleteOutlined />} />
+              <Button 
+                color="primary" 
+                icon={<EditOutlined />} 
+                onClick={() => this.handleEditShow(record.key)} 
+              />
+              <Popconfirm 
+                title="Sure to delete?" 
+                onConfirm={() => this.handleDelete(record.key)}
+              >
+                <Button 
+                  color="primary" 
+                  icon={<DeleteOutlined />} 
+                />
               </Popconfirm>
             </Space>
           ),
@@ -81,39 +109,59 @@ class UserPage extends Component {
   componentDidMount() {
     const { getUsers } = this.props;
 
-    getUsers({
-      pageNo: 1,
-    });
+    getUsers({ pageNo: 1 });
   }
 
-  handleCreate = () => {
-    this.setState({
-      currentUser: {},
-      isVisible: true,
-    });
+  getRequestStatus = () => {
+    const { status } = this.props;
+    const requests = [
+      GET_USERS.REQUEST,
+      CREATE_USER.REQUEST,
+      UPDATE_USER.REQUEST,
+      DELETE_USER.REQUEST,
+    ];
+
+    return _.includes(requests, status);
   }
 
-  handleDelete = (key) => {
-    const { users, deleteUser } = this.props;
-    const index = users.findIndex((user) => user.key === key);
-  
-    deleteUser({
-      userId: users[index].id,
-    });
+  getFailureStatus = () => {
+    const { status } = this.props;
+    const failures = [
+      GET_USERS.FAILURE,
+      CREATE_USER.FAILURE,
+      UPDATE_USER.FAILURE,
+      DELETE_USER.FAILURE,
+    ];
+
+    return _.includes(failures, status);
   }
 
-  handleEdit = (key) => {
+  setVisible = (isVisible = false) => {
+    this.setState({ isVisible });
+  }
+
+  setCurrentUser = (currentUser = {}) => {
+    this.setState({ currentUser });
+  }
+
+  handleCreateShow = () => {
+    this.setCurrentUser({});
+    this.setVisible(true);
+  }
+
+  handleEditShow = (key) => {
     const { users } = this.props;
     const index = users.findIndex((user)=> user.key === key);
     
-    this.setState({
-      currentUser: users[index],
-      isVisible: true,
-    });
+    this.setCurrentUser(users[index]);
+    this.setVisible(true);
   }
 
-  handleSave = (values) => {
-    const { createUser, updateUser } = this.props;
+  handleCreateOrUpdate = (values) => {
+    const { 
+      createUser, 
+      updateUser,
+    } = this.props;
     const { currentUser } = this.state;
 
     if (Object.keys(currentUser).length === 0) {
@@ -124,47 +172,81 @@ class UserPage extends Component {
         updatedUser: values,
       });
     }
+    this.setVisible();
+  }
+
+  handleDelete = (key) => {
+    const {
+      users, 
+      deleteUser,
+    } = this.props;
+    const index = users.findIndex((user) => user.key === key);
+  
+    deleteUser({ userId: users[index].id });
   }
   
-  handleToggle = () => {
-    this.setState({
-      isVisible: false,
-    });
+  handlePaginate = (page) => {
+    const { getUsers } = this.props;
+    
+    getUsers({ pageNo: page });
   }
 
   renderHeader = () => (
     <Row type="flex" justify="space-between">
       <Col>
-        User Management
+        <h2>User Management</h2>
       </Col>
       <Col>
         <Button 
           icon={<UserAddOutlined />} 
-          onClick={this.handleCreate}
+          onClick={this.handleCreateShow}
         />
       </Col>
     </Row>
   );
 
   render() {
-    const { users } = this.props;
-    const { currentUser, columns, isVisible } = this.state;
+    const { 
+      users,
+      userTotal,
+      error,
+    } = this.props;
+    const {
+      currentUser,
+      columns,
+      isVisible,
+    } = this.state;
+    const loading = this.getRequestStatus();
+    const failureStatus = this.getFailureStatus();
     
     return (
       <Layout>
         <Content>
+          { failureStatus &&
+            <Alert
+              message={error}
+              type="error"
+              showIcon
+              banner
+            />
+          }
           <CustomTable
             columns={columns}
             dataSource={users}
+            total={userTotal}
+            loading={loading}
+            handlePaginate={this.handlePaginate}
             renderHeader={this.renderHeader}
           />
-        </Content>  
-        <UserModal
-          isVisible={isVisible}
-          currentUser={currentUser}
-          handleToggle={this.handleToggle}
-          handleSubmit={this.handleSave}
-        />
+        </Content>
+        { isVisible &&
+          <UserModal
+            isVisible={isVisible}
+            currentUser={currentUser}
+            handleClose={() => this.setVisible()}
+            handleSave={this.handleCreateOrUpdate}
+          />
+        }
       </Layout>
     );
   }
@@ -172,6 +254,9 @@ class UserPage extends Component {
 
 const selectors = createStructuredSelector({
   users: selectUsers,
+  userTotal: selectUserTotal,
+  status: selectUserStatus,
+  error: selectUserError,
 });
 const actions = {
   getUsers,

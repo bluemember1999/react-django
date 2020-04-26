@@ -1,32 +1,43 @@
-import React, { Component } from 'react';
-import {
-  Modal,
-} from 'antd';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Modal } from 'antd';
 import { UserForm } from 'components';
 
-class UserModal extends Component {
-  render() {
-    const {
-      isVisible,
-      currentUser,
-      handleToggle,
-      handleSubmit,
-    } = this.props;
+const UserModal = ({
+  isVisible,
+  currentUser,
+  handleClose,
+  handleSave,
+}) => (
+  <Modal 
+    title="User Modal"
+    visible={isVisible}
+    okButtonProps={{ 
+      form: 'user-form', 
+      key: 'submit', 
+      htmlType: 'submit' 
+    }}
+    onCancel={handleClose}
+  >
+    <UserForm
+      currentUser={currentUser}
+      handleSave={handleSave}
+    />
+  </Modal>
+);
 
-    return (
-      <Modal 
-        title="User Modal"
-        visible={isVisible}
-        okButtonProps={{ form: 'user-form', key: 'submit', htmlType: 'submit' }}
-        onCancel={handleToggle}
-      >
-        <UserForm
-          currentUser={currentUser}
-          handleSubmit={handleSubmit}
-        />
-      </Modal>
-    );
-  }
-}
+UserModal.propTypes = {
+  isVisible: PropTypes.bool,
+  currentUser: PropTypes.object,
+  handleClose: PropTypes.func,
+  handleSave: PropTypes.func,
+};
+
+UserModal.defaultProps = {
+  isVisible: false,
+  currentUser: {},
+  handleClose: null,
+  handleSave: null,
+};
 
 export default UserModal;

@@ -1,5 +1,9 @@
 import { createBrowserHistory } from 'history';
-import { createStore, applyMiddleware, compose } from 'redux';
+import {
+  createStore,
+  applyMiddleware,
+  compose,
+} from 'redux';
 import { createLogger } from 'redux-logger';
 import createSagaMiddlware from 'redux-saga';
 import { routerMiddleware } from 'react-router-redux';

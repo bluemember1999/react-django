@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Form,
@@ -17,49 +17,61 @@ const formItemLayout = {
   },
 };
 
-class TimezoneForm extends Component {
-  handleSubmit = (values) => {
-    const { handleSubmit } = this.props;
-
-    handleSubmit(values);
-  }
-  
-  render() {
-    const { currentTimezone } = this.props;
-
-    return (
-      <Form
-        id="timezone-form"
-        name="timezone-form"
-        className="timezone-form"
-        onFinish={this.handleSubmit}
-        initialValues={currentTimezone}
-        scrollToFirstError
-        {...formItemLayout}
-      >
-        <Form.Item label="Name" name="name" rules={Validators.timezone_name.rules}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="Name Of City" name="name_of_city" rules={Validators.name_of_city.rules}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="Difference To GMT" name="difference_to_GMT" rules={Validators.difference_to_GMT.rules}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="User" name="user">
-          <Input />
-        </Form.Item>
-      </Form>
-    );
-  }
-}
+const TimezoneForm = ({
+  currentTimezone,
+  handleSave,
+}) => (
+  <Form
+    id="timezone-form"
+    name="timezone-form"
+    className="timezone-form"
+    onFinish={handleSave}
+    initialValues={currentTimezone}
+    scrollToFirstError
+    {...formItemLayout}
+  >
+    <Form.Item
+      label="Name"
+      name="name"
+      rules={Validators.timezone_name.rules}
+    >
+      <Input />
+    </Form.Item>
+    <Form.Item
+      label="Name Of City"
+      name="name_of_city"
+      rules={Validators.name_of_city.rules}
+    >
+      <Input />
+    </Form.Item>
+    <Form.Item
+      label="Difference To GMT"
+      name="difference_to_GMT"
+      rules={Validators.difference_to_GMT.rules}
+    >
+      <Input
+        type="number"
+        min={-12}
+        max={14}
+      />
+    </Form.Item>
+    <Form.Item
+      label="User"
+      name="user"
+    >
+      <Input />
+    </Form.Item>
+  </Form>
+);
 
 TimezoneForm.propTypes = {
-  handleValidSubmit: PropTypes.func,
+  currentTimezone: PropTypes.object,
+  handleSave: PropTypes.func,
 };
 
 TimezoneForm.defaultProps = {
-  handleValidSubmit: null,
+  currentTimezone: {},
+  handleSave: null,
 };
 
 export default TimezoneForm;

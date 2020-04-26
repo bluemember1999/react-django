@@ -1,15 +1,18 @@
-import { handleActions, combineActions } from 'redux-actions';
+import { 
+  handleActions, 
+  combineActions,
+} from 'redux-actions';
 import { get } from 'lodash';
 import { wrap as imm } from 'object-path-immutable';
-import { 
-  getAuthData,
-  clearAuthData,
-} from 'utils/storage';
 import {
   LOGIN,
   REGISTER,
   LOGOUT,
 } from 'store/constants/auth';
+import { 
+  getAuthData,
+  clearAuthData,
+} from 'utils/storage';
 
 const initialState = {
   user: get(getAuthData(), 'user', null),

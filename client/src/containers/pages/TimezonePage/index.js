@@ -2,16 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import {
-  selectTimezones,
-  selectTimezoneTotal,
-} from 'store/selectors/timezone';
-import {
-  getTimezones,
-  createTimezone,
-  updateTimezone,
-  deleteTimezone,
-} from 'store/actions/timezone';
-import {
+  Alert,
   Layout,
   Popconfirm,
   Button,
@@ -25,18 +16,42 @@ import {
   AppstoreAddOutlined,
 } from '@ant-design/icons';
 import {
+  GET_TIMEZONES,
+  CREATE_TIMEZONE,
+  UPDATE_TIMEZONE,
+  DELETE_TIMEZONE,
+} from 'store/constants/timezone';
+import {
+  getTimezones,
+  createTimezone,
+  updateTimezone,
+  deleteTimezone,
+} from 'store/actions/timezone';
+import {
+  selectTimezones,
+  selectTimezoneTotal,
+  selectTimezoneStatus,
+  selectTimezoneError,
+} from 'store/selectors/timezone';
+import {
   CustomTable,
   TimezoneModal,
 } from 'components';
+import _ from 'lodash';
 
 const { Content } = Layout;
 
-class UserPage extends Component {
+class TimezonePage extends Component {
   constructor(props) {
     super(props);
     
     this.state = {
       columns: [
+        {
+          title: 'No',
+          key: 'index',
+          render: (text, record, index) => index + 1,
+        },
         {
           title: 'User',
           dataIndex: 'user',
@@ -59,13 +74,22 @@ class UserPage extends Component {
         },
         {
           title: 'Actions',
-          dataIndex: 'actions',
           key: 'actions',
           render: (text, record) => (
             <Space>
-              <Button color="primary" icon={<EditOutlined />} onClick={() => this.handleEdit(record.key)} />
-              <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                <Button color="primary" icon={<DeleteOutlined />} />
+              <Button
+                color="primary"
+                icon={<EditOutlined />}
+                onClick={() => this.handleEditShow(record.key)}
+              />
+              <Popconfirm
+                title="Sure to delete?"
+                onConfirm={() => this.handleDelete(record.key)}
+              >
+                <Button
+                  color="primary"
+                  icon={<DeleteOutlined />}
+                />
               </Popconfirm>
             </Space>
           ),
@@ -79,48 +103,59 @@ class UserPage extends Component {
   componentDidMount() {
     const { getTimezones } = this.props;
 
-    getTimezones({
-      pageNo: 1,
-    });
+    getTimezones({ pageNo: 1 });
   }
 
-  handleCreate = () => {
-    this.setState({
-      currentTimezone: {},
-      isVisible: true,
-    });
+  getRequestStatus = () => {
+    const { status } = this.props;
+    const requests = [
+      GET_TIMEZONES.REQUEST,
+      CREATE_TIMEZONE.REQUEST,
+      UPDATE_TIMEZONE.REQUEST,
+      DELETE_TIMEZONE.REQUEST,
+    ];
+
+    return _.includes(requests, status);
   }
 
-  handleDelete = (key) => {
-    const { timezones, deleteTimezone } = this.props;
-    const index = timezones.findIndex((timezone) => timezone.key === key);
-  
-    deleteTimezone({
-      timezoneId: timezones[index].id,
-    });
+  getFailureStatus = () => {
+    const { status } = this.props;
+    const failures = [
+      GET_TIMEZONES.FAILURE,
+      CREATE_TIMEZONE.FAILURE,
+      UPDATE_TIMEZONE.FAILURE,
+      DELETE_TIMEZONE.FAILURE,
+    ];
+
+    return _.includes(failures, status);
   }
 
-  handleEdit = (key) => {
+  setVisible = (isVisible = false) => {
+    this.setState({ isVisible });
+  }
+
+  setCurrentTimezone = (currentTimezone = {}) => {
+    this.setState({ currentTimezone });
+  }
+
+  handleCreateShow = () => {
+    this.setCurrentTimezone();
+    this.setVisible(true);
+  }
+
+  handleEditShow = (key) => {
     const { timezones } = this.props;
     const index = timezones.findIndex((timezone)=> timezone.key === key);
     
-    this.setState({
-      currentTimezone: timezones[index],
-      isVisible: true,
-    });
+    this.setCurrentTimezone(timezones[index]);
+    this.setVisible(true);
   }
-
-  handlePaginate = (page, pageSize) => {
-    const { getTimezones } = this.props;
-
-    console.log(page);
-    getTimezones({
-      pageNo: page,
-    });
-  }
-
-  handleSave = (values) => {
-    const { createTimezone, updateTimezone } = this.props;
+  
+  handleCreateOrUpdate = (values) => {
+    const {
+      createTimezone,
+      updateTimezone,
+    } = this.props;
     const { currentTimezone } = this.state;
 
     if (Object.keys(currentTimezone).length === 0) {
@@ -131,23 +166,34 @@ class UserPage extends Component {
         updatedTimezone: values,
       });
     }
+    this.setVisible();
   }
+
+  handleDelete = (key) => {
+    const {
+      timezones,
+      deleteTimezone,
+    } = this.props;
+    const index = timezones.findIndex((timezone) => timezone.key === key);
   
-  handleToggle = () => {
-    this.setState({
-      isVisible: false,
-    });
+    deleteTimezone({ timezoneId: timezones[index].id });
+  }
+
+  handlePaginate = (page) => {
+    const { getTimezones } = this.props;
+
+    getTimezones({ pageNo: page });
   }
 
   renderHeader = () => (
     <Row type="flex" justify="space-between">
       <Col>
-        Timezone Management
+        <h2>Timezone Management</h2>
       </Col>
       <Col>
         <Button 
           icon={<AppstoreAddOutlined />} 
-          onClick={this.handleCreate}
+          onClick={this.handleCreateShow}
         />
       </Col>
     </Row>
@@ -157,30 +203,44 @@ class UserPage extends Component {
     const {
       timezones,
       timezoneTotal,
+      error,
     } = this.props;
     const {
       currentTimezone,
       columns,
       isVisible,
     } = this.state;
+    const loading = this.getRequestStatus();
+    const failureStatus = this.getFailureStatus();
     
     return (
       <Layout>
         <Content>
+          { failureStatus && 
+            <Alert
+              message={error}
+              type="error"
+              showIcon
+              banner
+            /> 
+          }
           <CustomTable
             columns={columns}
             dataSource={timezones}
             total={timezoneTotal}
+            loading={loading}
             handlePaginate={this.handlePaginate}
             renderHeader={this.renderHeader}
           />
         </Content>  
-        <TimezoneModal
-          isVisible={isVisible}
-          currentTimezone={currentTimezone}
-          handleToggle={this.handleToggle}
-          handleSubmit={this.handleSave}
-        />
+        { isVisible && 
+          <TimezoneModal
+            isVisible={isVisible}
+            currentTimezone={currentTimezone}
+            handleClose={() => this.setVisible()}
+            handleSave={this.handleCreateOrUpdate}
+          />
+        }
       </Layout>
     );
   }
@@ -189,6 +249,8 @@ class UserPage extends Component {
 const selectors = createStructuredSelector({
   timezones: selectTimezones,
   timezoneTotal: selectTimezoneTotal,
+  status: selectTimezoneStatus,
+  error: selectTimezoneError,
 });
 const actions = {
   getTimezones,
@@ -197,4 +259,4 @@ const actions = {
   deleteTimezone,
 };
 
-export default connect(selectors, actions)(UserPage);
+export default connect(selectors, actions)(TimezonePage);

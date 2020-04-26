@@ -15,11 +15,9 @@ axios.interceptors.request.use((config) => {
   if (!config) {
     config = {};
   }
-
   if (authData) {
     config.headers['Authorization'] = `jwt ${authData.token}`;
   }
-
   return config;
 });
 

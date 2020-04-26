@@ -11,63 +11,63 @@ import {
   UserOutlined,
   LockOutlined,
 } from '@ant-design/icons';
+import { SubmitButton } from 'components';
 import Validators from './Validators';
 
-class LoginForm extends React.Component {
-  handleSubmit = (values) => {
-    const { handleLogin } = this.props;
-
-    handleLogin(values);
-  }
-
-  render() {
-    const { loggingIn } = this.props;
-
-    return (
-      <Form
-        name="login-form"
-        className="login-form"
-        onFinish={this.handleSubmit}
+const LoginForm = ({ loggingIn, handleLogin }) => (
+  <Form
+    name="login-form"
+    className="login-form"
+    onFinish={handleLogin}
+  >
+    <Form.Item
+      name="email"
+      rules={Validators.email.rules}
+    >
+      <Input
+        type="email"
+        prefix={<UserOutlined className="site-form-item-icon" />} 
+        placeholder="Email"
+      />
+    </Form.Item>
+    <Form.Item
+      name="password"
+      rules={Validators.password.rules}
+    >
+      <Input
+        prefix={<LockOutlined className="site-form-item-icon" />}
+        type="password"
+        placeholder="Password"
+      />
+    </Form.Item>
+    <Form.Item>
+      <Row
+        type="flex"
+        justify="space-around"
+        align="middle"
       >
-        <Form.Item name="email" rules={Validators.email.rules}>
-          <Input
-            type="email"
-            prefix={<UserOutlined className="site-form-item-icon" />} 
-            placeholder="Email"
-          />
-        </Form.Item>
-        <Form.Item name="password" rules={Validators.password.rules}>
-          <Input
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
-            placeholder="Password"
-          />
-        </Form.Item>
-        <Form.Item>
-          <Row type="flex" justify="space-around" align="middle">
-            <Button type="primary" htmlType="submit" loading={loggingIn}>
-              Log In
-            </Button>
-            <Link to="/register">
-              <Button loading={loggingIn}>
-                Register
-              </Button>
-            </Link>
-          </Row>
-        </Form.Item>
-      </Form>
-    );
-  }
-}
+        <SubmitButton
+          loading={loggingIn}
+          name="Log In"
+        />
+        <Link to="/register">
+          <Button loading={loggingIn}>
+            Register
+          </Button>
+        </Link>
+      </Row>
+    </Form.Item>
+  </Form>
+)
 
 LoginForm.propTypes = {
   loggingIn: PropTypes.bool,
-  handleValidSubmit: PropTypes.func,
+  handleLogin: PropTypes.func,
 };
 
 LoginForm.defaultProps = {
   loggingIn: false,
-  handleValidSubmit: null,
+  handleLogin: null,
 };
 
 export default LoginForm;
