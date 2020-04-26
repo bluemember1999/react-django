@@ -79,7 +79,7 @@ class UserPage extends Component {
   }
 
   componentDidMount() {
-    const { getUsers} = this.props;
+    const { getUsers } = this.props;
 
     getUsers({
       pageNo: 1,
@@ -132,23 +132,19 @@ class UserPage extends Component {
     });
   }
 
-  renderHeader = () => {
-    const { handleCreate } = this.props;
-
-    return (
-      <Row type="flex" justify="space-between">
-        <Col>
-          User Management
-        </Col>
-        <Col>
-          <Button 
-            icon={<UserAddOutlined />} 
-            onClick={handleCreate}
-          />
-        </Col>
-      </Row>
-    );
-  }
+  renderHeader = () => (
+    <Row type="flex" justify="space-between">
+      <Col>
+        User Management
+      </Col>
+      <Col>
+        <Button 
+          icon={<UserAddOutlined />} 
+          onClick={this.handleCreate}
+        />
+      </Col>
+    </Row>
+  );
 
   render() {
     const { users } = this.props;

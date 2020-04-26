@@ -10,8 +10,8 @@ import {
   RegisterPage,
   Dashboard,
   UserPage,
-  // TimezonePage,
-  // Page404,
+  TimezonePage,
+  Page404,
 } from 'containers/Pages';
 import { ScrollToTop } from 'components';
 import {
@@ -22,14 +22,15 @@ import {
 } from 'utils/auth';
 
 const UserHoc = userIsAdminOrManager(UserPage);
+const TimezoneHoc = userIsAdminOrUser(TimezonePage);
 
 const AuthenticatedRoutes = () => (
   <CustomLayout>
     <Switch>
       <Route exact path="/" component={Dashboard} />
-      {/* <Route path="/timezone" component={userIsAdminOrUser(TimezonePage)} /> */}
+      <Route path="/timezone" component={TimezoneHoc} />
       <Route path="/user" component={UserHoc} />
-      {/* <Route component={Page404} /> */}
+      <Route component={Page404} />
     </Switch>
   </CustomLayout>
 );

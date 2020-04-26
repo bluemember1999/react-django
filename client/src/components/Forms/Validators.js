@@ -30,4 +30,19 @@ export default {
       { required: true, message: 'Please select your role!' },
     ],
   },
+  timezone_name: {
+    rules: [
+      { required: true, mesage: 'Please input your timezone name!'},
+    ],
+  },
+  name_of_city: {
+    rules: [
+      { required: true, mesage: 'Please input your city!'},
+    ],
+  },
+  difference_to_GMT: {
+    rules: [
+      { required: true, mesage: 'Please input your difference to GMT!'},
+    ],
+  },
 };

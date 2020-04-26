@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   Form,
@@ -19,7 +19,7 @@ const formItemLayout = {
   },
 };
 
-class UserForm extends React.Component {
+class UserForm extends Component {
   handleSubmit = (values) => {
     const { handleSubmit } = this.props;
 

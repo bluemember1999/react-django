@@ -14,7 +14,6 @@ const initialState = {
     pageNo: 1,
     pageSize: 10,
   },
-  currentUser: null,
   status: 'INIT',
   error: null,
 };
@@ -47,7 +46,6 @@ export const userReducer = handleActions({
 
     return imm(state)
       .set('users.data', updated)
-      .set('currentUser', null)
       .set('status', type)
       .value();
   },
@@ -62,7 +60,6 @@ export const userReducer = handleActions({
 
     return imm(state)
       .set('users.data', updated)
-      .set('currentUser', null)
       .set('status', type)
       .value();
   },
@@ -74,7 +71,6 @@ export const userReducer = handleActions({
 
     return imm(state)
       .set('users.data', updated)
-      .set('currentUser', null)
       .set('status', type)
       .value();
   },

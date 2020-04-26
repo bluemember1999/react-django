@@ -21,7 +21,6 @@ export function* doGetUsers({ payload }) {
 
 export function* doCreateUser({ payload }) {
   try {
-    console.log(payload);
     const res = yield call(axios.post, `${API_BASE_URL}/api/user/`, payload);
 
     yield put(ACTIONS.createUserSuccess(res.data));

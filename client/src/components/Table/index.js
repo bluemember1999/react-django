@@ -9,6 +9,8 @@ class CustomTable extends Component {
       columns,
       dataSource,
       renderHeader,
+      total,
+      handlePaginate,
     } = this.props;
 
     return (
@@ -16,6 +18,11 @@ class CustomTable extends Component {
         columns={columns}
         dataSource={dataSource}
         title={renderHeader}
+        pagination={{ 
+          defaultPageSize: 10,
+          total: total,
+          onChange: handlePaginate,
+        }}
       />
     );
   }
