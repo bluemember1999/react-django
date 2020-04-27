@@ -28,7 +28,6 @@ import {
   updateTimezone,
   deleteTimezone,
 } from 'store/actions/timezone';
-import { selectLoggedInUserId } from 'store/selectors/auth';
 import {
   selectTimezones,
   selectTimezoneTotal,
@@ -186,12 +185,11 @@ export class TimezonePage extends Component {
     const {
       createTimezone,
       updateTimezone,
-      loggedInUserId,
     } = this.props;
     const { currentTimezone } = this.state;
 
     if (Object.keys(currentTimezone).length === 0) {
-      createTimezone({ ...values, user: loggedInUserId});
+      createTimezone({ ...values });
     } else {
       updateTimezone({
         timezoneId: currentTimezone.id,
@@ -286,7 +284,6 @@ const selectors = createStructuredSelector({
   timezonePageNo: selectTimezonePageNo,
   status: selectTimezoneStatus,
   error: selectTimezoneError,
-  loggedInUserId: selectLoggedInUserId,
 });
 const actions = {
   getTimezones,
@@ -301,7 +298,6 @@ TimezonePage.propTypes = {
   timezonePageNo: PropTypes.number,
   status: PropTypes.string,
   error: PropTypes.string,
-  loggedInUserId: PropTypes.string,
   getTimezones: PropTypes.func,
   createTimezone: PropTypes.func,
   updateTimezone: PropTypes.func,
@@ -314,7 +310,6 @@ TimezonePage.defaultProps = {
   timezonePageNo: 1,
   status: '',
   error: '',
-  loggedInUserId: '1',
   getTimezones: null,
   createTimezone: null,
   updateTimezone: null,

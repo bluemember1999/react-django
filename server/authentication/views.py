@@ -6,7 +6,6 @@ from .models import User
 from .serializers import (
     CustomJSONWebTokenSerializer,
     UserSerializer,
-    UserCreateSerializer,
 )
 from .utils import get_jwt_token
 
@@ -31,7 +30,7 @@ class LoginView(JSONWebTokenAPIView):
 class RegisterView(CreateAPIView):
     authentication_classes = ()
     permission_classes = ()
-    serializer_class = UserCreateSerializer
+    serializer_class = UserSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

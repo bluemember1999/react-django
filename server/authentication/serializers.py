@@ -32,10 +32,19 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'password', 'email', 'role')
+        read_only_fields = ('id',)
         extra_kwargs = {
             'password': { 'write_only': True },
         }
     
+    def create(self, validated_data):
+        user = super(UserSerializer, self).create(validated_data)
+        password = validated_data.get('password')
+        user.set_password(password)
+        user.save()
+
+        return user
+
     def update(self, instance, validated_data):
         for field in validated_data:
             if field == 'password':
@@ -44,20 +53,3 @@ class UserSerializer(serializers.ModelSerializer):
                 instance.__setattr__(field, validated_data.get(field))
         instance.save()
         return instance
-
-class UserCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password', 'role')
-        read_only_fields = ('id',)
-        extra_kwargs = {
-            'password': { 'write_only': True },
-        }
-
-    def create(self, validated_data):
-        user = super(UserCreateSerializer, self).create(validated_data)
-        password = validated_data.get('password')
-        user.set_password(password)
-        user.save()
-
-        return user

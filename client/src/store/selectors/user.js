@@ -8,4 +8,4 @@ export const selectUserPageNo = (state) => get(state, 'user.users.pageNo');
 
 export const selectUserStatus = (state) => get(state, 'user.status');
 
-export const selectUserError =(state) => get(state, 'user.error');
+export const selectUserError = (state) => get(state, 'user.error');

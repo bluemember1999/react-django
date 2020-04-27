@@ -6,7 +6,6 @@ import {
   selectAuthError,
   selectIsAdmin,
   selectIsManager,
-  selectIsUser,
 } from '../auth';
 
 const mockState = {
@@ -29,8 +28,6 @@ describe('AuthSelector', () => {
   it('should return auth roles', () => {
     let state = mockState;
 
-    expect(selectIsUser(state)).toEqual(true);
-  
     state = update(state, {
       auth: {
         user: {

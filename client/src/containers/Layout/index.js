@@ -24,7 +24,6 @@ import { getTimezones } from 'store/actions/timezone';
 import {
   selectIsAdmin,
   selectIsManager,
-  selectIsUser,
 } from 'store/selectors/auth';
 import _ from 'lodash';
 
@@ -128,7 +127,6 @@ export const CustomLayout = ({
 const selectors = createStructuredSelector({
   isAdmin: selectIsAdmin,
   isManager: selectIsManager,
-  isUser: selectIsUser,
 });
 const actions = {
   getUsers,
@@ -139,7 +137,6 @@ const actions = {
 CustomLayout.propTypes = {
   isAdmin: PropTypes.bool,
   isManager: PropTypes.bool,
-  isUser: PropTypes.bool,
   children: PropTypes.node,
   location: PropTypes.object,
   getUsers: PropTypes.func,
@@ -150,7 +147,6 @@ CustomLayout.propTypes = {
 CustomLayout.defaultProps = {
   isAdmin: false,
   isManager: false,
-  isUser: true,
   children: null,
   location: {},
   getUsers: null,

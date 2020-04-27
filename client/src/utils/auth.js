@@ -3,7 +3,6 @@ import {
   selectLoggedIn,
   selectIsAdmin,
   selectIsManager,
-  selectIsUser,
 } from 'store/selectors/auth';
 
 export const userIsNotAuthenticated = connectedRouterRedirect({
@@ -25,11 +24,4 @@ export const userIsAdminOrManager = connectedRouterRedirect({
   allowRedirectBack: false,
   authenticatedSelector: (state) => selectIsManager(state) || selectIsAdmin(state),
   wrapperDisplayName: 'UserIsAdminOrManager',
-});
-
-export const userIsAdminOrUser = connectedRouterRedirect({
-  redirectPath: '/not-found',
-  allowRedirectBack: false,
-  authenticatedSelector: (state) => selectIsUser(state) || selectIsAdmin(state),
-  wrapperDisplayName: 'UserIsAdminOrUser',
 });
