@@ -2,7 +2,8 @@ import { get } from 'lodash';
 import { UserMock } from 'test/mocks';
 import {
   selectUsers,
-  selectCurrentUser,
+  selectUserTotal,
+  selectUserPageNo,
   selectUserStatus,
   selectUserError,
 } from '../user';
@@ -13,9 +14,8 @@ const mockState = {
       data: [UserMock(1), UserMock(2)],
       pageNo: 1,
       pageSize: 10,
-      total: 0,
+      total: 2,
     },
-    currentUser: UserMock(1),
     status: 'INIT',
     error: null,
   },
@@ -27,8 +27,8 @@ describe('UserSelector', () => {
 
     expect(selectUsers(mockState)).toEqual(get(user, 'users.data'));
     expect(selectUserTotal(mockState)).toEqual(get(user, 'users.total'));
-    expect(selectCurrentUser(mockState)).toEqual(user.currentUser);
-    expect(selectUserStatus(mockState)).toEqual(user.status);
-    expect(selectUserError(mockState)).toEqual(user.error);
+    expect(selectUserPageNo(mockState)).toEqual(get(user, 'users.pageNo'));
+    expect(selectUserStatus(mockState)).toEqual(get(user, 'status'));
+    expect(selectUserError(mockState)).toEqual(get(user, 'error'));
   });
 });

@@ -1,4 +1,4 @@
-import { pick, get } from 'lodash';
+import { pick } from 'lodash';
 import { UserMock } from 'test/mocks';
 import {
   GET_USERS,
@@ -13,8 +13,8 @@ const initialState = {
     data: [UserMock(1)],
     pageNo: 1,
     pageSize: 10,
+    total: 1,
   },
-  currentUser: null,
   status: 'INIT',
   error: null,
 };
@@ -41,32 +41,58 @@ describe('UserReducer', () => {
 
   it('should return GET_USERS success state', () => {
     const type = GET_USERS.SUCCESS;
-    const action = { type, payload: { data: [UserMock(1), UserMock(2)], pageNo: 1 } };
+    const action = { 
+      type, 
+      payload: { 
+        data: { 
+          results: [UserMock(1), UserMock(2)],
+          count: 2,
+        }, 
+        pageNo: 1, 
+      } 
+    };
     const nextState = userReducer(initialState, action);
 
     expect(pick(nextState, ['users', 'status'])).toEqual({
       users: {
-        data: action.payload.data,
+        data: action.payload.data.results,
         pageNo: action.payload.pageNo,
         pageSize: 10,
+        total: 2,
       },
       status: action.type,
     });
   });
 
-  it('should return CREATE_USER success state', () => {
+  it('should return CREATE_USER success state with different data', () => {
     const type = CREATE_USER.SUCCESS;
     const action = { type, payload: UserMock(2) };
     const nextState = userReducer(initialState, action);
   
-    expect(pick(nextState, ['users', 'currentUser', 'status'])).toEqual({
+    expect(pick(nextState, ['users', 'status'])).toEqual({
       users: {
         data: [UserMock(2), UserMock(1)],
         pageNo: 1,
         pageSize: 10,
+        total: 2,
       },
       status: action.type,
-      currentUser: null,
+    });
+  });
+
+  it('should return CREATE_USER success state with same data', () => {
+    const type = CREATE_USER.SUCCESS;
+    const action = { type, payload: UserMock(1) };
+    const nextState = userReducer(initialState, action);
+  
+    expect(pick(nextState, ['users', 'status'])).toEqual({
+      users: {
+        data: [UserMock(1)],
+        pageNo: 1,
+        pageSize: 10,
+        total: 1,
+      },
+      status: action.type,
     });
   });
 
@@ -76,30 +102,46 @@ describe('UserReducer', () => {
     const action = { type, payload: updated };
     const nextState = userReducer(initialState, action);
 
-    expect(pick(nextState, ['users', 'currentUser', 'status'])).toEqual({
+    expect(pick(nextState, ['users', 'status'])).toEqual({
       users: {
         data: [updated],
         pageNo: 1,
         pageSize: 10,
+        total: 1,
       },
       status: action.type,
-      currentUser: null,
     });
   });
 
-  it('should return DELETE_USER success state', () => {
+  it('should return DELETE_USER success state with existed record', () => {
     const type = DELETE_USER.SUCCESS;
     const action = { type, payload: 1 };
     const nextState = userReducer(initialState, action);
 
-    expect(pick(nextState, ['users', 'currentUser', 'status'])).toEqual({
+    expect(pick(nextState, ['users', 'status'])).toEqual({
       users: {
         data: [],
         pageNo: 1,
         pageSize: 10,
+        total: 0,
       },
       status: action.type,
-      currentUser: null,
+    });
+  });
+
+  it('should return DELETE_USER success state with non-existed record', () => {
+    const type = DELETE_USER.SUCCESS;
+    const action = { type, payload: 2 };
+    const nextState = userReducer(initialState, action);
+
+    expect(pick(nextState, ['users', 'status'])).toEqual({
+      users: {
+        data: [UserMock(1)],
+        pageNo: 1,
+        pageSize: 10,
+        total: 1,
+      },
+      status: action.type,
     });
   });
 

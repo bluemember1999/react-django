@@ -1,23 +1,19 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { mount } from 'enzyme';
-import { updateFormValues } from 'test/helpers';
-import RegisterForm from '../RegisterForm';
+import { UserMock } from 'test/mocks';
+import { getInputValue } from 'test/helpers';
+import UserForm from '../UserForm';
 
-describe('RegisterForm', () => {
-  const formData = {
-    first_name: 'john',
-    last_name: 'doe',
-    email: 'johndoe@gmail.com',
-    username: 'johndoe',
-  };
+describe('UserForm', () => {
   const propsMock = {
-    registering: true,
-    handleRegister: jest.fn(),
+    isAdmin: false,
+    currentUser: UserMock(1),
+    handleSave: jest.fn(),
   };
   let wrapper;
 
-  beforeAll(() => {
+  beforeEach(() => {
     Object.defineProperty(window, "matchMedia", {
       writable: true,
       value: jest.fn().mockImplementation(query => ({
@@ -33,7 +29,7 @@ describe('RegisterForm', () => {
     });
     wrapper = mount(
       <Router>
-        <RegisterForm {...propsMock} />
+        <UserForm {...propsMock} />
       </Router>
     );
   });
@@ -42,11 +38,10 @@ describe('RegisterForm', () => {
     expect(wrapper.exists('form')).toBeTruthy();
   });
 
-  it('should submit entered data', () => {
-    updateFormValues(wrapper, formData, 'register-form');
-    wrapper.find('button[type="submit"]').simulate('click');
-    expect(propsMock.handleRegister).toHaveBeenCalledWith(formData);
+  it('should check default text', () => {
+    expect(getInputValue(wrapper, 'user-form', 'first_name')).toEqual(UserMock(1).first_name);
+    expect(getInputValue(wrapper, 'user-form', 'last_name')).toEqual(UserMock(1).last_name);
+    expect(getInputValue(wrapper, 'user-form', 'username')).toEqual(UserMock(1).username);
+    expect(getInputValue(wrapper, 'user-form', 'email')).toEqual(UserMock(1).email);
   });
-});
-
-
+})

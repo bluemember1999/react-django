@@ -1,23 +1,18 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { mount } from 'enzyme';
-import { updateFormValues } from 'test/helpers';
-import RegisterForm from '../RegisterForm';
+import { TimezoneMock } from 'test/mocks';
+import { getInputValue } from 'test/helpers';
+import TimezoneForm from '../TimezoneForm';
 
-describe('RegisterForm', () => {
-  const formData = {
-    first_name: 'john',
-    last_name: 'doe',
-    email: 'johndoe@gmail.com',
-    username: 'johndoe',
-  };
+describe('TimezoneForm', () => {
   const propsMock = {
-    registering: true,
-    handleRegister: jest.fn(),
+    currentTimezone: TimezoneMock(1),
+    handleSave: jest.fn(),
   };
   let wrapper;
 
-  beforeAll(() => {
+  beforeEach(() => {
     Object.defineProperty(window, "matchMedia", {
       writable: true,
       value: jest.fn().mockImplementation(query => ({
@@ -33,7 +28,7 @@ describe('RegisterForm', () => {
     });
     wrapper = mount(
       <Router>
-        <RegisterForm {...propsMock} />
+        <TimezoneForm {...propsMock} />
       </Router>
     );
   });
@@ -42,11 +37,9 @@ describe('RegisterForm', () => {
     expect(wrapper.exists('form')).toBeTruthy();
   });
 
-  it('should submit entered data', () => {
-    updateFormValues(wrapper, formData, 'register-form');
-    wrapper.find('button[type="submit"]').simulate('click');
-    expect(propsMock.handleRegister).toHaveBeenCalledWith(formData);
+  it('should check default text', () => {
+    expect(getInputValue(wrapper, 'timezone-form', 'name')).toEqual(TimezoneMock(1).name);
+    expect(getInputValue(wrapper, 'timezone-form', 'name_of_city')).toEqual(TimezoneMock(1).name_of_city);
+    expect(getInputValue(wrapper, 'timezone-form', 'difference_to_GMT')).toEqual(TimezoneMock(1).difference_to_GMT);
   });
-});
-
-
+})

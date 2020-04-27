@@ -44,7 +44,7 @@ import _ from 'lodash';
 
 const { Content } = Layout;
 
-class TimezonePage extends Component {
+export class TimezonePage extends Component {
   constructor(props) {
     super(props);
     

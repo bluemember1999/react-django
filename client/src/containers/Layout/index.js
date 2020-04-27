@@ -33,10 +33,9 @@ const {
   Content,
 } = Layout;
 
-const CustomLayout = ({
+export const CustomLayout = ({
   isAdmin,
   isManager,
-  isUser,
   children,
   location,
   getUsers,
@@ -77,14 +76,12 @@ const CustomLayout = ({
             mode="horizontal" 
             selectedKeys={[selectedKey]}
           >
-            { (isAdmin || isUser) &&
-              <Menu.Item key="/timezone">
-                <Link to="/timezone">
-                  <FieldTimeOutlined />
-                  Timezone
-                </Link>
-              </Menu.Item>
-            }
+            <Menu.Item key="/timezone">
+              <Link to="/timezone">
+                <FieldTimeOutlined />
+                Timezone
+              </Link>
+            </Menu.Item>
             {
               (isAdmin || isManager) &&
               <Menu.Item key="/user">

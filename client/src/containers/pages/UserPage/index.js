@@ -44,7 +44,7 @@ import _ from 'lodash';
 
 const { Content } = Layout;
 
-class UserPage extends Component {
+export class UserPage extends Component {
   constructor(props) {
     super(props);
     

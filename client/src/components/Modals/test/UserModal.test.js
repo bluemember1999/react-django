@@ -1,21 +1,19 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { mount } from 'enzyme';
-import { updateFormValues } from 'test/helpers';
-import LoginForm from '../LoginForm';
+import { UserMock } from 'test/mocks';
+import UserModal from '../UserModal';
 
-describe('LoginForm', () => {
-  const formData = {
-    email: 'johndoe@gmail.com',
-    password: 'admin',
-  };
+describe('UserModal', () => {
+  let handleSave = jest.fn();
   const propsMock = {
-    loggingIn: true,
-    handleLogin: jest.fn(),
+    isVisible: true,
+    isAdmin: false,
+    currentUser: UserMock(1),
+    handleClose: jest.fn(),
   };
   let wrapper;
 
-  beforeAll(() => {
+  beforeEach(() => {
     Object.defineProperty(window, "matchMedia", {
       writable: true,
       value: jest.fn().mockImplementation(query => ({
@@ -30,21 +28,29 @@ describe('LoginForm', () => {
       })),
     });
     wrapper = mount(
-      <Router>
-        <LoginForm {...propsMock} />
-      </Router>
+      <UserModal {...propsMock} handleSave={handleSave} />
     );
   });
 
   it('should render component', () => {
     expect(wrapper.exists('form')).toBeTruthy();
+    wrapper = mount(
+      <UserModal 
+        {...propsMock} 
+        isVisible={false}
+      />
+    );
+    expect(wrapper.exists('form')).toBeFalsy();
   });
+
+  it('should close modal', () => {
+    wrapper.find('button').at(0).simulate('click');
+    expect(wrapper.exists('form')).toBeFalsy();
+  })
 
   it('should submit entered data', () => {  
-    updateFormValues(wrapper, formData, 'login-form');
+    console.log(wrapper.find('button[type="submit"]').props());
     wrapper.find('button[type="submit"]').simulate('click');
-    expect(propsMock.handleLogin).toHaveBeenCalledWith(formData);
+    expect(handleSave).toHaveBeenCalledWith(UserMock(1));
   });
-});
-
-
+})

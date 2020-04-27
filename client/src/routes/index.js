@@ -2,13 +2,13 @@ import React from 'react';
 import {
   BrowserRouter,
   Route,
+  Redirect,
   Switch,
 } from 'react-router-dom';
 import CustomLayout from 'containers/Layout';
 import {
   LoginPage,
   RegisterPage,
-  Dashboard,
   UserPage,
   TimezonePage,
   Page404,
@@ -18,17 +18,15 @@ import {
   userIsAuthenticated,
   userIsNotAuthenticated,
   userIsAdminOrManager,
-  userIsAdminOrUser,
 } from 'utils/auth';
 
 const UserHoc = userIsAdminOrManager(UserPage);
-const TimezoneHoc = userIsAdminOrUser(TimezonePage);
 
 const AuthenticatedRoutes = () => (
   <CustomLayout>
     <Switch>
-      <Route exact path="/" component={Dashboard} />
-      <Route path="/timezone" component={TimezoneHoc} />
+      <Redirect exact path="/" to="/timezone" />
+      <Route path="/timezone" component={TimezonePage} />
       <Route path="/user" component={UserHoc} />
       <Route component={Page404} />
     </Switch>

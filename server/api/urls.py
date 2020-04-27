@@ -1,14 +1,12 @@
 from django.conf.urls import url
+from rest_framework.routers import SimpleRouter
 from .views import (
-    TimezoneListView,
-    TimezoneDetailView,
-    UserListView,
-    UserDetailView,
+    TimezoneViewSet,
+    UserViewSet,
 )
 
-urlpatterns = [
-    url(r'^timezone/', TimezoneListView.as_view()),
-    url(r'^timezone/(?P<pk>(\w+))/$', TimezoneDetailView.as_view()),
-    url(r'^user/$', UserListView.as_view()),
-    url(r'^user/(?P<pk>(\w+))/$', UserDetailView.as_view()),
-]
+router = SimpleRouter()
+router.register(r'timezone', TimezoneViewSet)
+router.register(r'user', UserViewSet)
+
+urlpatterns = router.urls
