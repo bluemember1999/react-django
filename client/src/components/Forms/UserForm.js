@@ -46,7 +46,7 @@ const UserForm = ({
     >
       <Input />
     </Form.Item>
-    <Form.Item 
+    <Form.Item
       label="Username" 
       name="username" 
       rules={Validators.username.rules}
@@ -60,9 +60,10 @@ const UserForm = ({
     >
       <Input />
     </Form.Item>
-    <Form.Item 
+    <Form.Item
       label="Password" 
       name="password"
+      rules={Object.keys(currentUser).length === 0 ? Validators.password.rules : []}
     >
       <Input.Password />
     </Form.Item>
@@ -70,7 +71,7 @@ const UserForm = ({
       label="Role" 
       name="role"
     >
-      <Select>
+      <Select defaultValue="USER">
         <Select.Option value="USER">USER</Select.Option>
         <Select.Option value="MANAGER">MANAGER</Select.Option>
         { isAdmin &&

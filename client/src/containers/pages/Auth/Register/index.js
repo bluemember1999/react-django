@@ -13,7 +13,7 @@ import {
 import { RegisterForm } from 'components';
 import { withRouter } from 'react-router';
 
-const RegisterPage = ({
+export const RegisterPage = ({
   status,
   error,
   register,

@@ -42,4 +42,4 @@ describe('TimezoneForm', () => {
     expect(getInputValue(wrapper, 'timezone-form', 'name_of_city')).toEqual(TimezoneMock(1).name_of_city);
     expect(getInputValue(wrapper, 'timezone-form', 'difference_to_GMT')).toEqual(TimezoneMock(1).difference_to_GMT);
   });
-})
+});

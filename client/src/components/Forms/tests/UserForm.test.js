@@ -44,4 +44,4 @@ describe('UserForm', () => {
     expect(getInputValue(wrapper, 'user-form', 'username')).toEqual(UserMock(1).username);
     expect(getInputValue(wrapper, 'user-form', 'email')).toEqual(UserMock(1).email);
   });
-})
+});

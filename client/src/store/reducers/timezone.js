@@ -52,7 +52,7 @@ export const timezoneReducer = handleActions({
     const timezones = get(state,  'timezones.data');
     const total = get(state, 'timezones.total');
     const isExisted = timezones.findIndex((timezone) => timezone.id === payload.id) >= 0;
-    const updated = isExisted === false ? 
+    const updated = isExisted === false ?
       [{ ...payload, key: payload.id }, ...timezones] : [...timezones];
     const updatedTotal = isExisted === false ? total + 1 : total;
 

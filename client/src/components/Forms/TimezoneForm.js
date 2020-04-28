@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import {
   Form,
   Input,
+  Select,
 } from 'antd';
 import Validators from './Validators';
+import Timezones from './Timezone';
 
 const formItemLayout = {
   labelCol: {
@@ -49,11 +51,18 @@ const TimezoneForm = ({
       name="difference_to_GMT"
       rules={Validators.difference_to_GMT.rules}
     >
-      <Input
-        type="number"
-        min={-12}
-        max={14}
-      />
+      <Select>
+        {
+          Timezones.timezones.map((item, index) => (
+            <Select.Option 
+              value={item}
+              index={index}
+            >
+              {item}
+            </Select.Option>
+          ))
+        }
+      </Select>
     </Form.Item>
   </Form>
 );

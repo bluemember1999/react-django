@@ -45,10 +45,10 @@ describe('TimezoneModal', () => {
   it('should close modal', () => {
     wrapper.find('button').at(0).simulate('click');
     expect(wrapper.exists('form')).toBeFalsy();
-  })
+  });
 
   it('should submit entered data', () => {  
     wrapper.find('button').at(2).simulate('click');
     expect(propsMock.handleSave).toHaveBeenCalledWith(TimezoneMock(1));
   });
-})
+});

@@ -35,7 +35,7 @@ describe('TimezonePage', () => {
 
   it('should render component', () => {
     expect(wrapper.exists(CustomTable)).toBeTruthy();
-  })
+  });
 
   it('should show error message', () => {
     const error = "error";

@@ -45,14 +45,14 @@ const RegisterForm = ({
     scrollToFirstError
     {...formItemLayout}
   >
-    <Form.Item 
+    <Form.Item
       label="First Name" 
       name="first_name" 
       rules={Validators.first_name.rules}
     >
       <Input />
     </Form.Item>
-    <Form.Item 
+    <Form.Item
       label="Last Name" 
       name="last_name" 
       rules={Validators.last_name.rules}
@@ -85,7 +85,7 @@ const RegisterForm = ({
       name="confirm_password"
       rules={
         [
-          { reuiqred: true, message: 'Please confirm your password!' },
+          { required: true, message: 'Please confirm your password!' },
           ({ getFieldValue }) => ({
             validator(rule, value) {
               if (!value || getFieldValue('password') === value) {

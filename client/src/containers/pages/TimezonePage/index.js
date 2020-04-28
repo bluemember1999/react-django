@@ -75,10 +75,7 @@ export class TimezonePage extends Component {
           key: 'difference_to_GMT',
           render: (text) => (
             <span>
-              { `UTC${text >= 0 ?
-                  `+${String(text).padStart(2, '0')}` : 
-                  `-${String(Math.abs(text)).padStart(2, '0')}`}:00`
-              }
+              { `UTC${text}` }
             </span>
           )
         },
@@ -93,7 +90,7 @@ export class TimezonePage extends Component {
           title: 'Difference to Browser Time',
           key: 'difference_to_browser_time',
           render: (text, record) => (
-            <span>{ `${-new Date().getTimezoneOffset() / 60 - record.difference_to_GMT}hrs` }</span>
+            <span>{ `${(-new Date().getTimezoneOffset() + this.getTimezoneOffset(record.difference_to_GMT)) / 60 } hrs` }</span>
           )
         },
         {
@@ -130,9 +127,20 @@ export class TimezonePage extends Component {
     getTimezones({ pageNo: 1 });
   }
 
-  getTimeByTimezone = (offset) => {
+  getTimezoneOffset = (timezone) => {
+    const numbers = timezone.match(/[0-9]{2}/g);
+    const symbol = timezone[0] === '+' ? -1 : 1;
+
+    if (numbers.length !== 2) {
+      return 0;
+    }
+
+    return (Number(numbers[0]) * 60 + Number(numbers[1])) * symbol;
+  }
+
+  getTimeByTimezone = (timezone) => {
     return new Date(
-      new Date().getTime() + offset * 3600 * 1000
+      new Date().getTime() + (-this.getTimezoneOffset(timezone) * 60) * 1000
     ).toUTCString().replace( / GMT$/, "" );
   }
 

@@ -4,7 +4,7 @@ import { UserMock } from 'test/mocks';
 import UserModal from '../UserModal';
 
 describe('UserModal', () => {
-  let handleSave = jest.fn();
+  const handleSave = jest.fn();
   const propsMock = {
     isVisible: true,
     isAdmin: false,
@@ -46,11 +46,10 @@ describe('UserModal', () => {
   it('should close modal', () => {
     wrapper.find('button').at(0).simulate('click');
     expect(wrapper.exists('form')).toBeFalsy();
-  })
+  });
 
   it('should submit entered data', () => {  
-    console.log(wrapper.find('button[type="submit"]').props());
     wrapper.find('button[type="submit"]').simulate('click');
     expect(handleSave).toHaveBeenCalledWith(UserMock(1));
   });
-})
+});

@@ -13,7 +13,7 @@ import {
 } from 'store/selectors/auth';
 import { LoginForm } from 'components';
 
-const LoginPage = ({
+export const LoginPage = ({
   status,
   error,
   logIn,
