@@ -13,7 +13,7 @@ class TimezoneViewSet(ModelViewSet):
     search_fields = ['name']
     filter_backends = (SearchFilter,)
     serializer_class = TimezoneSerializer
-    queryset = Timezone.objects.all()
+    queryset = Timezone.objects.all().order_by('-created_at')
 
     def get_queryset(self):
         queryset = super(TimezoneViewSet, self).get_queryset()
@@ -35,7 +35,7 @@ class UserViewSet(ModelViewSet):
     search_fields = ['username']
     filter_backends = (SearchFilter,)
     serializer_class = UserSerializer
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by('-date_joined')
 
     def get_queryset(self):
         queryset = super(UserViewSet, self).get_queryset()
