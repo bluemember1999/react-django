@@ -36,6 +36,7 @@ import {
   selectTimezoneError,
 } from 'store/selectors/timezone';
 import {
+  Clock,
   CustomTable,
   TimezoneModal,
 } from 'components';
@@ -83,7 +84,7 @@ export class TimezonePage extends Component {
           title: 'Current Time in timezone',
           key: 'current_time',
           render: (text, record) => (
-            <span>{ this.getTimeByTimezone(record.difference_to_GMT) }</span>
+            <Clock offset={this.getTimezoneOffset(record.difference_to_GMT)}/>
           )
         },
         {

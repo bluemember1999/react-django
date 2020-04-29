@@ -55,6 +55,7 @@ const TimezoneForm = ({
         {
           Timezones.timezones.map((item, index) => (
             <Select.Option 
+              key={item}
               value={item}
               index={index}
             >
